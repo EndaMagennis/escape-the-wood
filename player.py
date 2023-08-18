@@ -27,13 +27,13 @@ class Player:
         except TypeError:
             # if there are characters outside of the alphabet
             print("""How could ones name consist of anything but letters?
-Surely you lie!\n""")
+            Surely you lie!\n""")
             self.name_player()
 
         except ValueError:
             print(f"""I find it hard to believe that your
-name is {len(player_name)} letters long.
-Most names are longer than 3 letters
-and shorter than 12. Try again.\n""")
+            name is {len(player_name)} letters long.
+            Most names are longer than 3 letters
+            and shorter than 12. Try again.\n""")
             self.name_player()
         return player_name
