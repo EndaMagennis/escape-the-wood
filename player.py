@@ -12,7 +12,10 @@ class Player:
         self.id = id
 
     def name_player(self):
-
+        """
+        Prompts user to give player a name.
+        Validates user input and sets player name if valid.
+        """
         player_name = input("Enter your name:\n")
         self.name = player_name
         try:
@@ -37,3 +40,15 @@ class Player:
             and shorter than 12. Try again.\n""")
             self.name_player()
         return player_name
+
+    def pick_up_item(self):
+        # code to write
+        pass
+
+    def use_item(self, item):
+        # code to write
+        pass
+
+    def move_to_room(self, room):
+        # code to write
+        pass
