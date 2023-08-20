@@ -27,5 +27,6 @@ def main():
     # iph.register_user_inputs(current_player)
     cottage.describe_room()
     current_player.pick_up_item(cottage.inventory)
- 
+
+
 main()
