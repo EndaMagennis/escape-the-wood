@@ -3,6 +3,8 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 import player
 import input_handler
+import item
+import room
 
 
 intro = """\nYou have awoken in a ramshackel abode on the outskirts of a town.
@@ -14,14 +16,16 @@ Now piece yourself together. Who are you?'\n
 Your head begins swimming; the past rushing to meet the present.
 You suddenely remember yourself.\n"""
 
-current_player = player.Player("", [], (0, 0), {}, 1)
+cottage = room.cottage
+current_player = player.Player("", {}, (0, 0), "room.cottage", 1)
 iph = input_handler.InputHandler()
 
 
 def main():
     print(intro)
-    current_player.name_player()
-    iph.register_user_inputs()
-
-
+    # current_player.name_player()
+    # iph.register_user_inputs(current_player)
+    cottage.describe_room()
+    current_player.pick_up_item(cottage.inventory)
+ 
 main()
