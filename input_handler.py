@@ -5,7 +5,7 @@ class InputHandler():
     def __init__(self):
         pass
 
-    def register_user_inputs(self):
+    def register_user_inputs(self, player):
         game = True
         actions = [
             "move", "use", "pick up", "attack",
@@ -20,4 +20,3 @@ class InputHandler():
                     if str(user_action) == str(actions[-1]):
                         print("Exiting")
                         game = False
-                    print(user_action)
