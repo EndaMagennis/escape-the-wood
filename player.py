@@ -1,4 +1,5 @@
 import item
+import room
 
 
 class Player:
@@ -7,13 +8,37 @@ class Player:
     information such as a current room, inventory,
     and name.
     """
-    
+  
     def __init__(self, name, inventory, current_room, actions, id):
+        """
+        Initialises an instance of the player
+        """
         self.name = name
         self.inventory = inventory
         self.current_room = current_room
         self.actions = actions
         self.id = id
+  
+    def register_user_inputs(self, room):
+        game = True
+        room = self.current_room
+        areas = room.searchable_areas
+        actions = [
+            "move", "use", "pick up", "attack",
+            "look", "equip", "fight", "exit", "search"
+        ]
+        while game:
+
+            user_action = input("What would you like to do?\n")
+            user_action.lower()
+
+            for a in actions:
+                if user_action == a:
+                    if user_action == actions[-1]:
+                        self.search(room, areas)
+                    if str(user_action) == "exit":
+                        print("Exiting")
+                        game = False
 
     def name_player(self):
         """
@@ -47,8 +72,22 @@ class Player:
             and shorter than 12. Try again.\n""")
             self.name_player()
         return player_name
-
+    
+    def search(self, room, areas):
+            room = self.current_room
+            areas = room.searchable_areas
+            print(room.name, areas)
+            place_to_look = input("Where would you like to search?:\n")
+            for area in areas:
+                if place_to_look == str(area):
+                    print(f"you search the {str(area)}")
+                    break
+    
     def pick_up_item(self, new_item):
+        """
+        Method to update the player's inventory with a
+        new item, determined by the room the player is in. 
+        """
         # append a dictionary entry to the player's inventory
         print(f"You have picked up the {new_item}")
         self.inventory.update(new_item)
