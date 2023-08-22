@@ -18,6 +18,9 @@ FINDABLE_ITEMS = {
 
 
 def return_item(request):
+    """
+    A function to return an item from the FINDABLE_ITEMS dictionary
+    """
     for id, items in FINDABLE_ITEMS.items():
         for key, value in items.items():
             if request == key:
