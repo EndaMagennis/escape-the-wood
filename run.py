@@ -17,16 +17,15 @@ Your head begins swimming; the past rushing to meet the present.
 You suddenely remember yourself.\n"""
 
 cottage = room.cottage
-current_player = player.Player("", {}, (0, 0), "room.cottage", 1)
-iph = input_handler.InputHandler()
+current_player = player.Player("", {}, cottage, [], 1)
 
 
 def main():
     print(intro)
     # current_player.name_player()
-    # iph.register_user_inputs(current_player)
     cottage.describe_room()
-    current_player.pick_up_item(cottage.inventory)
+    current_player.register_user_inputs(current_player.current_room)
+    # current_player.pick_up_item(cottage.inventory)
 
 
 main()

@@ -13,6 +13,7 @@ FINDABLE_ITEMS = {
     },
     "notes": {
         "note": "I've found it, finally",
+        "book": "A Teological examination of the Old Gods",
     }
 }
 
@@ -25,3 +26,4 @@ def return_item(request):
         for key, value in items.items():
             if request == key:
                 return {key: value}
+    return id
