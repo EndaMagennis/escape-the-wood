@@ -8,8 +8,8 @@ class Player:
     information such as a current room, inventory,
     and name.
     """
-  
-    def __init__(self, name, inventory, current_room, actions, id):
+
+    def __init__(self, name, inventory, current_room, actions):
         """
         Initialises an instance of the player
         """
@@ -17,9 +17,11 @@ class Player:
         self.inventory = inventory
         self.current_room = current_room
         self.actions = actions
-        self.id = id
-  
+
     def register_user_inputs(self, room):
+        """
+        Records user inputs and calls the relevant methods.
+        """
         game = True
         room = self.current_room
         areas = room.searchable_areas
@@ -27,18 +29,32 @@ class Player:
             "move", "use", "pick up", "attack",
             "look", "equip", "fight", "exit", "search"
         ]
+
         while game:
-
+            print(f"You can do any of the following things:\n {actions}")
             user_action = input("What would you like to do?\n")
-            user_action.lower()
+            try:
+                # check that user_action only uses alphabet characters
+                if not user_action.isalpha():
+                    raise TypeError
 
-            for a in actions:
-                if user_action == a:
-                    if user_action == actions[-1]:
-                        self.search(room, areas)
-                    if str(user_action) == "exit":
-                        print("Exiting")
-                        game = False
+            except TypeError:
+                # if there are characters outside of the alphabet
+                print("""I have no way to interpert such intent.
+                Please use one of the following commands:\n""")
+                print(actions)
+                self.register_user_inputs(room)
+
+            if user_action.lower() in actions:
+                if user_action == "search":
+                    self.search(room, areas)
+                elif user_action == "move":
+                    self.move_to_room(room, "")
+                elif str(user_action) == "exit":
+                    print("Exiting")
+                    game = False
+            else:
+                print("That is not a valid choice. Try again.")
 
     def name_player(self):
         """
@@ -72,17 +88,35 @@ class Player:
             and shorter than 12. Try again.\n""")
             self.name_player()
         return player_name
-    
+  
     def search(self, room, areas):
-            room = self.current_room
-            areas = room.searchable_areas
-            print(room.name, areas)
-            place_to_look = input("Where would you like to search?:\n")
-            for area in areas:
-                if place_to_look == str(area):
-                    print(f"you search the {str(area)}")
-                    break
-    
+        """
+        Prompts user to search areas based on current room.
+        """
+        room = self.current_room
+        areas = room.searchable_areas
+        # print the searchable areas for the user
+        for index in areas:
+            print(index)
+        # ask user where to look
+        place_to_look = input("Where would you like to search?:\n")
+        item_location = room.choose_random_item_location(
+                        room.searchable_areas)
+
+        for area in areas:
+            # check that player has put in searchable area
+            if place_to_look == str(area):
+                # give user feedback
+                print(f"you search the {str(area)}")
+                if place_to_look == item_location:
+                    print(f"You found the {room.inventory}")
+                    self.pick_up_item(room.inventory)
+                    print(self.inventory)
+                else:
+                    print("You found nothing")
+                    self.search(self.current_room,
+                                self.current_room.searchable_areas)
+
     def pick_up_item(self, new_item):
         """
         Method to update the player's inventory with a
@@ -100,6 +134,10 @@ class Player:
     def use_item(self, item):
         pass
 
-    def move_to_room(self, room):
-        # code to write
-        pass
+    def move_to_room(self, current_room, direction):
+
+        current_room = self.current_room
+        direction = input(f"Which direction?\n")
+        links = current_room.linked_rooms
+        if direction in links:
+            print(links.keys())
