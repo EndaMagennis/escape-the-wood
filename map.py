@@ -29,11 +29,13 @@ cottage = room.Room(
     # List of searchable areas 
     ["bookshelf", "cabinet", "bed"],
     # Where the item can be found 
-    "bookshelf",
+    None,
     # Links to other rooms
     {"north": "The Woods"},
     # Items required to enter this room 
-    None
+    None,
+    # Defaulting to false for item found 
+    False
     )
 
 # Creating a cottage Room
@@ -61,12 +63,14 @@ woods = room.Room(
     # List of searchable areas 
     ["brambles"],
     # Where the item can be found 
-    "",
+    None,
     # Links to other rooms
     {"north": "The Village Path", "south": "The Cottage",
         "east": "The Dark Woods", "west": "The Glade"},
     # Items required to enter this room 
-    "cottage key"
+    "cottage key",
+    # Defaulting to false for item found 
+    False
 )
 
 # Creating a village_path Room
@@ -94,12 +98,14 @@ village_path = room.Room(
     # List of searchable areas 
     ["leaf pile", "nearby tree"],
     # Where the item can be found 
-    "",
+    None,
     # Links to other rooms
     {"north": "The Abandoned Church", "south": "The Woods",
         "east": "The River", "west": "The Dark Wood"},
     # Items required to enter this room 
-    None
+    None,
+    # Defaulting to false for item found 
+    False
 )
 
 # Creating a church Room
@@ -133,7 +139,10 @@ chruch = room.Room(
     # Links to other rooms
     {"south": "The Village Path", "east": "The Village", "west": "The Clearing"},
     # Items required to enter this room 
-    None
+    None,
+    # Defaulting to false for item found 
+    False
+
 )
 
 # Creating a dark_woods Room
@@ -157,7 +166,9 @@ dark_woods = room.Room(
     # Links to other rooms
     {"south": "The Village Path", "east": "The Village", "west": "The Clearing"},
     # Items required to enter this room 
-    "torch"
+    "torch",
+    # Defaulting to false for item found 
+    False
 )
 
 river = room.Room(
@@ -180,7 +191,9 @@ river = room.Room(
     # Links to other rooms
     {"south": "The Village Path"},
     # Items required to enter this room 
-    "broken sword"
+    "broken sword",
+    # Defaulting to false for item found 
+    False
 )
 
 glade = room.Room(
@@ -203,9 +216,10 @@ glade = room.Room(
     # Links to other rooms
     {"south": "The Abandoned Church"},
     # Items required to enter this room 
-    "broken sword"
+    "broken sword",
+    # Defaulting to false for item found 
+    False
 )
-
 
 # a set of all room objects
 all_rooms = {
@@ -214,7 +228,12 @@ all_rooms = {
 
 def set_item_locations_for_each_room():
     for room in all_rooms:
-        room.choose_random_item_location(room.searchable_areas)
+        for item in room.inventory:
+            item_location = room.choose_random_item_location(room.searchable_areas)
+            room.item_location = item_location
+    
+    return item_location
+
 
 def generate_room_from_name(name):
     """
