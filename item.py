@@ -6,7 +6,7 @@ FINDABLE_ITEMS = {
         "dagger": 25,
         "mace": 35,
         "bow": 35,
-        },
+    },
     "keys": {
         "cottage key": "key to the cottage",
         "golden key": "key with a golden hue",
@@ -28,8 +28,9 @@ def return_item(request):
     """
     A function to return an item from the FINDABLE_ITEMS dictionary
     """
-    for id, items in FINDABLE_ITEMS.items():
-        for key, value in items.items():
-            if request == key:
-                return {key: value}
-    return id
+    for out_key, out_value in FINDABLE_ITEMS.items():
+        for in_key, in_value in out_value.items():
+            if request in in_key:
+                print(in_key)
+                return in_key              
+
