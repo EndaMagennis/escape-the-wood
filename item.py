@@ -30,7 +30,8 @@ def return_item(request):
     """
     for out_key, out_value in FINDABLE_ITEMS.items():
         for in_key, in_value in out_value.items():
-            if request in in_key:
-                print(in_key)
-                return in_key              
+            if request == in_key:
+                return in_key
+
+
 
