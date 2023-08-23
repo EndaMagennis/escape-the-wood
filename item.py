@@ -5,6 +5,7 @@ FINDABLE_ITEMS = {
         "shortsword": 30,
         "dagger": 25,
         "mace": 35,
+        "bow": 35,
         },
     "keys": {
         "cottage key": "key to the cottage",
@@ -14,6 +15,11 @@ FINDABLE_ITEMS = {
     "notes": {
         "note": "I've found it, finally",
         "book": "A Teological examination of the Old Gods",
+    },
+    "equipment": {
+        "torch": 10,
+        "rope": "50 feet",
+        "arrows": 10
     }
 }
 

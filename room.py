@@ -5,6 +5,8 @@ import random
 class Room:
     """
     Creates an instance of the Room class.
+    Rooms have inventories, item locations
+    and paths to other rooms
     """
     def __init__(
                 self, name, description, path_descriptions, inventory,
@@ -24,7 +26,7 @@ class Room:
         Describes the instance of a room.
         """
         print(self.description)
-    
+
     def describe_paths(self):
         """
         Describes the North, South, East and West paths from current room
@@ -36,9 +38,11 @@ class Room:
         Randomly selects which of the searchable areas holds the item
         """
         searchable_areas = self.searchable_areas
-        random_choice = random.randint(0, len(searchable_areas) - 1)  
+        # choosing a random area to place the item
+        random_choice = random.randint(0, len(searchable_areas) - 1)
         selected_area = searchable_areas[random_choice]
 
+        # setting the room's item_location to the selected_area
         self.item_location = selected_area
         return selected_area
 
@@ -121,6 +125,24 @@ chruch = Room(
     though little can be seen of a village.
     West of the church is a clearing of some sort.
     """,
-    item.return_item("book"), ["pulpit", "tabernacle", "table"], "",
-    {"south": "village path", "east": "village", "west": "clearing"}, ""
+    [item.return_item("book"), item.return_item("torch")],
+    ["pulpit", "tabernacle", "table"],
+    None,
+    {"south": "village path", "east": "village", "west": "clearing"},
+    None
+)
+
+dark_woods = Room(
+    "The Dark Woods",
+    """
+    Description of the dark woods
+    """,
+    """
+    Description of the possible paths
+    """,
+    [item.return_item("shortsword"), item.return_item("rope")],
+    ["black tree", "shiny object"],
+    None,
+    {"south": "village path", "east": "village", "west": "clearing"},
+    "torch"
 )
