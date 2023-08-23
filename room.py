@@ -8,7 +8,7 @@ class Room:
     """
     def __init__(
                 self, name, description, path_descriptions, inventory,
-                searchable_areas, item_location, linked_rooms, required_item
+                searchable_areas, item_location, linked_rooms, required_item, item_found
                 ):
         self.name = name
         self.description = description
@@ -18,6 +18,7 @@ class Room:
         self.item_location = item_location
         self.linked_rooms = linked_rooms
         self.required_item = required_item
+        self.item_found = item_found
 
     def describe_room(self):
         """
