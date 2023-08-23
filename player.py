@@ -17,6 +17,8 @@ class Player:
     def validate_input(self, input, type_err_message, val_err_message):
         """ Method to validate user input when prompted"""
         try:
+            if input == "exit":
+                return
             if not input.isalnum():
                 raise TypeError
             elif len(input) < 2 or len(input) > 22:
@@ -97,23 +99,29 @@ class Player:
         """ Prompts user to search areas based on current room."""
         room = self.current_room
         item_location = room.item_location
+        areas = room.searchable_areas
+        print(*room.searchable_areas, sep = ", ")
         # ask user where to look
         place_to_look = input("Where would you like to search?:\n")
 
-        if place_to_look in str(areas):
+        if place_to_look.lower() in str(areas):
             # give user feedback
             print(f"you search the {place_to_look}")
             # checking if the user is searching the item_location
-            if place_to_look == item_location:
-                print(f"You found the {room.inventory}")
+            if place_to_look == item_location and not room.item_found:
+                item = room.inventory
+                print(f"You found the {item}")
+                room.item_found = True
                 # Calling the pick_up_item method to add the item to inventory
-                self.pick_up_item(room.inventory)
+                self.pick_up_item(item)
             else:
                 print("You found nothing")
                 # repeating the method
                 # issue: the item_location is randomized each time
                 self.search(self.current_room,
                             self.current_room.searchable_areas)
+        elif place_to_look == "exit":
+                return
         else:
             print("That is not an area. Try again")
             self.search(room, areas)
