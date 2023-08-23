@@ -1,6 +1,4 @@
-import item
-import room
-
+import map
 
 class Player:
     """
@@ -10,56 +8,67 @@ class Player:
     """
 
     def __init__(self, name, inventory, current_room, actions):
-        """
-        Initialises an instance of the player
-        """
+        """ Initialises an instance of the player """
         self.name = name
         self.inventory = inventory
         self.current_room = current_room
         self.actions = actions
+    
+    def validate_input(self, input, type_err_message, val_err_message):
+        """ Method to validate user input when prompted"""
+        try:
+            if not input.isalnum():
+                raise TypeError
+            elif len(input) < 2 or len(input) > 22:
+                raise ValueError
+        
+        except TypeError:
+            print(type_err_message)
+            return False
+        
+        except ValueError:
+            print(val_err_message)
+            return False
+        return True
 
     def register_user_inputs(self, room):
-        """
-        Records user inputs and calls the relevant methods.
-        """
+        """ Records user inputs and calls the relevant methods """
         # Setting game to true for a continuous loop
         game = True
         room = self.current_room
         areas = room.searchable_areas
         # a list of possible actions
         actions = [
-            "move", "use", "pick up", "attack",
-            "look", "equip", "fight", "exit", "search"
+            "MOVE", "CHECK", "ATTACK",
+            "LOOK", "FIGHT", "EXIT", "SEARCH"
         ]
 
         while game:
-            print(f"You can do any of the following things:\n {actions}")
+            print(f"You can do any of the following things:\n")
+            print(*actions, sep = ", ")
+            print()
             user_action = input("What would you like to do?\n")
 
-            # validating user input. as this is repeted code, i'm considering
-            # creating a fuction to validate all instances of inputs
-            try:
-                # check that user_action only uses alphabet characters
-                if not user_action.isalpha():
-                    raise TypeError
-
-            except TypeError:
-                # if there are characters outside of the alphabet
-                print("""I have no way to interpert such intent.
-                Please use one of the following commands:\n""")
-
-                print(actions)
-                # repeat the method
-                self.register_user_inputs(room)
-
-            # ensuring that case sensitivity is not an issue
-            # and that the action is possible
-            if user_action.lower() in actions:
+            if self.validate_input(
+                user_action, 
+                "That is not a valid action. Try again\n", 
+                "That is not a valid action. Try again\n") == False:
+                    continue
+            # Removing case sensitivity and checking for valid actions
+            if user_action.upper() in actions:
                 if user_action == "search":
+                    # Calling the search method
                     self.search(room, areas)
                 elif user_action == "move":
+                    # calling the move_to_room method
                     self.move_to_room(room, "")
-                elif str(user_action) == "exit":
+                elif user_action == "check":
+                    # Calling the check_inventory method
+                    self.check_inventory()
+                elif user_action == "look":
+                    # Calling the look method
+                    self.look(self.current_room)
+                elif user_action == "exit":
                     print("Exiting")
                     game = False
             else:
@@ -70,65 +79,51 @@ class Player:
         Prompts user to give player a name.
         Validates user input and sets player name if valid.
         """
+
         # prompting user to give a name
-        player_name = input("Enter your name:\n")
+        player_name = input("Enter your name:\n").capitalize()
+        if self.validate_input(
+            player_name, 
+            "Please give a name consisting only of numbers or letters", 
+            "Please give a name name between 2 to 22 letters in length"
+            ) == False:
+            self.name_player()
+
         # sets the player name for the instance of the player
         self.name = player_name
-        try:
-            # check that player_name only uses alphabet characters
-            if not player_name.isalpha():
-                raise TypeError
-            # check that the player_name is within the charcter limit
-            elif len(player_name) < 3 or len(player_name) > 12:
-                raise ValueError
-            print(f"Welcome, {player_name}. Your journey begins here.")
-
-        except TypeError:
-            # if there are characters outside of the alphabet
-            print("""How could ones name consist of anything but letters?
-            Surely you lie!\n""")
-            self.name_player()
-
-        except ValueError:
-            # if the player name is outside the character limit
-            print(f"""I find it hard to believe that your
-            name is {len(player_name)} letters long.
-            Most names are longer than 3 letters
-            and shorter than 12. Try again.\n""")
-            self.name_player()
         return player_name
 
     def search(self, room, areas):
-        """
-        Prompts user to search areas based on current room.
-        """
+        """ Prompts user to search areas based on current room."""
         room = self.current_room
-        areas = room.searchable_areas
-        item_location = room.choose_random_item_location(
-                        room.searchable_areas)
-        print(item_location)
+        item_location = room.item_location
         # ask user where to look
         place_to_look = input("Where would you like to search?:\n")
 
-        for area in areas:
-            # check that player has put in searchable area
-            if place_to_look == str(area):
-                # give user feedback
-                print(f"you search the {str(area)}")
-                # checking if the user is searching the item_location
-                if place_to_look == item_location:
-                    print(f"You found the {room.inventory}")
-                    # adding the item to inventory
-                    self.pick_up_item(room.inventory)
-                else:
-                    print("You found nothing")
-                    # repeating the method
-                    # issue: the item_location is randomized each time
-                    self.search(self.current_room,
-                                self.current_room.searchable_areas)
+        if place_to_look in str(areas):
+            # give user feedback
+            print(f"you search the {place_to_look}")
+            # checking if the user is searching the item_location
+            if place_to_look == item_location:
+                print(f"You found the {room.inventory}")
+                # Calling the pick_up_item method to add the item to inventory
+                self.pick_up_item(room.inventory)
             else:
-                print("That is not an area. Try again")
-                self.search(room, areas)
+                print("You found nothing")
+                # repeating the method
+                # issue: the item_location is randomized each time
+                self.search(self.current_room,
+                            self.current_room.searchable_areas)
+        else:
+            print("That is not an area. Try again")
+            self.search(room, areas)
+
+    def check_inventory(self):
+        print(f"You are currently holding:\n {self.inventory}")
+
+    def look(self, room):
+        room = self.current_room
+        room.describe_paths()
 
     def pick_up_item(self, new_item):
         """
@@ -137,9 +132,8 @@ class Player:
         """
         # append a dictionary entry to the player's inventory
         print(f"You have picked up the {new_item}")
-        for id, key in new_item:
-            print(id)
-            return key, id
+        self.inventory.append(new_item)
+        
 
     def discard_item(self, item):
         # removes item from inventory
@@ -152,8 +146,31 @@ class Player:
     def move_to_room(self, current_room, direction):
 
         current_room = self.current_room
+        # Describing the directional options to the user
+        current_room.describe_paths()
+        # Prompting the user for directional input
         direction = input(f"Which direction?\n")
+        # Validatiing user input
+        if self.validate_input(
+            direction,
+            "Sorry, that is not a valid direction",
+            "Sorry, that is not a valid direction"
+            ) == False:
+            # Repeating method until valid input is given
+            self.move_to_room(self.current_room, " ")
+
+        # referencing the current rooms posible paths
         links = current_room.linked_rooms
         # checking if the user has chosen a possible cardinal direction
-        if direction in links:
-            print(links.keys())
+        if direction.lower() in links:
+            # Setting the new_name variable as the value stored in the in the links key 
+            new_name = links[direction]
+            # Calling the generate_room_from_name function to return the associated room object
+            new_room = map.generate_room_from_name(new_name)
+            # Setting the player's current room to the new_room
+            self.current_room = new_room
+            # Describing the new room to the user
+            new_room.describe_room()    
+        else:
+            print("Wah wah")
+            self.move_to_room(self.current_room, " ")
