@@ -26,8 +26,8 @@ class Player:
             # Check if user enters exit at any input phase
             if input == "exit":
                 return
-            # Check that only numbers and letter are used
-            if not input.isalnum():
+            # Check that only numbers and letter and spaces are used
+            if not input.isalnum() and input.isspace():
                 raise TypeError
             # Control the length of the input
             elif len(input) < 2 or len(input) > 22:
@@ -45,7 +45,7 @@ class Player:
     def register_user_inputs(self, room):
         """ Records user inputs and calls the relevant methods """
         # Setting game to true for a continuous loop
-        game = True
+        self.alive = True
         room = self.current_room
         areas = room.searchable_areas
         # a list of possible actions
@@ -54,7 +54,7 @@ class Player:
             "LOOK", "USE", "DESCRIBE", "EXIT", 
         ]
 
-        while game:
+        while self.alive:
             print(f"You can do any of the following things:\n")
             print(*actions, sep = ", ")
             print()
@@ -69,30 +69,38 @@ class Player:
             user_action = user_action.upper()
             if user_action in actions:
                 if user_action == actions[0]:
-                    # Calling the search method
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the search method
                     self.search(room, areas)
                 elif user_action == actions[1]:
-                    # calling the move_to_room method
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the move_to_room method
                     self.move_to_room(room, "")
                 elif user_action == actions[2]:
-                    # Calling the check_inventory method
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the check_inventory method
                     self.check_inventory()
                 elif user_action == actions[3]:
-                    # Calling the look method
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the look method
                     self.look(self.current_room)
                 elif user_action == actions[4]:
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the use_item method
                     self.use_item(self.inventory)
                 elif user_action == actions[5]:
+                    # Clearing the terminal
                     os.system('cls')
+                    # Calling the describe_room method
                     room.describe_room()
                 elif user_action == actions[6]:
                     print("Exiting")
-                    game = False
+                    self.alive = False
             else:
                 print("That is not a valid choice. Try again.")
 
@@ -102,19 +110,21 @@ class Player:
         Validates user input and sets player name if valid.
         """
 
-        # prompting user to give a name
+        # Prompting user to give a name
         player_name = input("Enter your name:\n").capitalize()
+        # Calling the validate_input method to validate player_name
         if self.validate_input(
             player_name, 
             "Please give a name consisting only of numbers or letters", 
             "Please give a name name between 2 to 22 letters in length"
             ) == False:
+            # Repeating the name_player method until a valid input is given.
             self.name_player()
-
-        # sets the player name for the instance of the player
-        self.name = player_name
-        print(f"Hello, {player_name}. Your journey begins in: ")
-        return player_name
+        else:
+        # If the input is valid
+            self.name = player_name
+            print(f"Hello, {player_name}. Your journey begins in: ")
+            return player_name
 
     def search(self, room, areas):
         """ Prompts user to search areas based on current room."""
@@ -170,13 +180,31 @@ class Player:
         print("As soon as the item hits the ground, it mysteriously vanishes")
 
     def use_item(self, inventory):
+        """
+        Method prompts player to choose an item from their inventory.
+        If it exists, it will return the item.
+        """
         if len(inventory) > 0:
-
-            print("What would you like to use?: ")
-            print(*inventory)
+            print(*inventory, sep= ", ")
+            chosen_item = input("What would you like to use?:\n")
+            if self.validate_input(
+                chosen_item, 
+                "Not a valid selection. Please try again!",
+                "Not a valid selection. Please try again!",
+                ) == False:
+                self.use_item(self.inventory)
+            
+            chosen_item = chosen_item.lower()
+            if chosen_item in self.inventory:
+                print(f"You use the {chosen_item}")
+                
+            else:
+                print("That's not in your inventory")
+                self.use_item(self.inventory)
+            
+            return chosen_item
         else:
             print("You haven't got anything to use.")
-        pass
 
     def move_to_room(self, current_room, direction):
 
@@ -205,14 +233,30 @@ class Player:
             new_name = links[direction]
             # Calling the generate_room_from_name function to return the associated room object
             new_room = map.generate_room_from_name(new_name)
-            if new_room.required_item in self.inventory:
+            if new_room.required_item in self.inventory or new_room.has_event:
                 # Setting the player's current room to the new_room
                 self.current_room = new_room
                 # Describing the new room to the user
                 new_room.describe_room()
+                if new_room.has_event:
+                    self.trigger_event(new_room, new_room.required_item, "")
             else:
                 print("You cannot go that way... yet")
                 return
         else:
             print("That is not a possible path.")
             self.move_to_room(self.current_room, " ")
+
+    def trigger_event(self, room, required_item, outcome):
+        room = self.current_room
+        required_item = room.required_item
+        used_item = self.use_item(self.inventory)
+
+        if room.has_encounter:
+            if used_item == required_item:
+                print("You did it")
+            else:
+                print("You Died. Game Over")
+                self.alive = False
+        
+       
