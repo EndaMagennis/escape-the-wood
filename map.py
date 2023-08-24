@@ -36,7 +36,7 @@ cottage = room.Room(
     # Links to other rooms
     {"north": "The Woods"},
     # Items required to enter this room 
-    "",
+    "cottage key",
     # Defaulting to false for item found 
     False,
     # Defaulting to false for has_been_visited
