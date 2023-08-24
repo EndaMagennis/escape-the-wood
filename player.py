@@ -70,32 +70,32 @@ class Player:
             if user_action in actions:
                 if user_action == actions[0]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the search method
                     self.search(room, areas)
                 elif user_action == actions[1]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the move_to_room method
                     self.move_to_room(room, "")
                 elif user_action == actions[2]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the check_inventory method
                     self.check_inventory()
                 elif user_action == actions[3]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the look method
                     self.look(self.current_room)
                 elif user_action == actions[4]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the use_item method
                     self.use_item(self.inventory)
                 elif user_action == actions[5]:
                     # Clearing the terminal
-                    os.system('cls')
+                    os.system('clear')
                     # Calling the describe_room method
                     self.current_room.describe_room()
                 elif user_action == actions[6]:
