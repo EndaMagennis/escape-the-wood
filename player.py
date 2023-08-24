@@ -142,12 +142,12 @@ class Player:
             # checking if the user is searching the item_location
             if place_to_look == item_location and not room.item_found:
                 item = room.inventory
-                print(f"You found the {item}")
+                print(f"You found the {item}\n")
                 room.item_found = True
                 # Calling the pick_up_item method to add the item to inventory
                 self.pick_up_item(item)
             else:
-                print("You found nothing")
+                print("You found nothing\n")
                 # repeating the method
                 # issue: the item_location is randomized each time
                 self.search(self.current_room,
@@ -155,11 +155,11 @@ class Player:
         elif place_to_look == "exit":
                 return
         else:
-            print("That is not an area. Try again")
+            print("That is not an area. Try again\n")
             self.search(room, areas)
 
     def check_inventory(self):
-        print(f"You are currently holding:\n {self.inventory}")
+        print(f"You are currently holding:\n {self.inventory}\n")
 
     def look(self, room):
         room = self.current_room
@@ -171,13 +171,8 @@ class Player:
         new item, determined by the room the player is in.
         """
         # append a dictionary entry to the player's inventory
-        print(f"You have picked up the {new_item}")
+        print(f"You have picked up the {new_item}\n")
         self.inventory.append(new_item)
-        
-    def discard_item(self, item):
-        # removes item from inventory
-        self.inventory.pop(item)
-        print("As soon as the item hits the ground, it mysteriously vanishes")
 
     def use_item(self, inventory):
         """
@@ -198,15 +193,15 @@ class Player:
                 # If valid
                 chosen_item = chosen_item.lower()
                 if chosen_item in self.inventory:
-                    print(f"You use the {chosen_item}")
+                    print(f"You use the {chosen_item}\n")
                 elif chosen_item == "exit":
                     return
                 else:
-                    print("That's not in your inventory")
+                    print("That's not in your inventory\n")
                     self.use_item(self.inventory)
                 return chosen_item
         else:
-            print("You haven't got anything to use.")
+            print("You haven't got anything to use.\n")
 
     def move_to_room(self, current_room, direction):
 
@@ -218,8 +213,8 @@ class Player:
         # Validatiing user input
         if self.validate_input(
             direction,
-            "Sorry, that is not a valid direction",
-            "Sorry, that is not a valid direction"
+            "Sorry, that is not a valid direction\n",
+            "Sorry, that is not a valid direction\n"
             ) == False:
             # Repeating method until valid input is given
             self.move_to_room(self.current_room, " ")
@@ -239,14 +234,15 @@ class Player:
                 # Setting the player's current room to the new_room
                 self.current_room = new_room
                 # Describing the new room to the user
+                os.system('clear')
                 new_room.describe_room()
                 if new_room.has_event:
                     self.trigger_event(new_room, new_room.required_item)
             else:
-                print("You cannot go that way... yet")
+                print(f"You cannot go that way... yet\n")
                 return
         else:
-            print("That is not a possible path.")
+            print("That is not a possible path.\n")
             self.move_to_room(self.current_room, " ")
 
     def trigger_event(self, room, required_item):
@@ -257,20 +253,20 @@ class Player:
         # Check for an encounter
         if room.has_encounter:
             if used_item == required_item:
-                print("You did it")
+                print("You did it\n")
                 room.has_encounter = False
                 room.has_event = False
             else:
-                print("You Died. Game Over")
+                print("You Died. Game Over\n")
                 self.alive = False
         else:
             if used_item == required_item:
-                print("You did it")
+                print("You did it\n")
                 room.has_encounter = False
                 room.has_event = False
             else:
                 sleep(2)
-                print("It did not work")
+                print("It did not work\n")
                 self.trigger_event(room, required_item)
         
        
