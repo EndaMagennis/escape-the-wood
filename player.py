@@ -97,7 +97,7 @@ class Player:
                     # Clearing the terminal
                     os.system('cls')
                     # Calling the describe_room method
-                    room.describe_room()
+                    self.current_room.describe_room()
                 elif user_action == actions[6]:
                     print("Exiting")
                     self.alive = False
@@ -239,7 +239,7 @@ class Player:
                 # Describing the new room to the user
                 new_room.describe_room()
                 if new_room.has_event:
-                    self.trigger_event(new_room, new_room.required_item, "")
+                    self.trigger_event(new_room, new_room.required_item)
             else:
                 print("You cannot go that way... yet")
                 return
@@ -247,16 +247,28 @@ class Player:
             print("That is not a possible path.")
             self.move_to_room(self.current_room, " ")
 
-    def trigger_event(self, room, required_item, outcome):
+    def trigger_event(self, room, required_item):
         room = self.current_room
         required_item = room.required_item
         used_item = self.use_item(self.inventory)
-
+        
+        # Check for an encounter
         if room.has_encounter:
             if used_item == required_item:
                 print("You did it")
+                room.has_encounter = False
+                room.has_event = False
             else:
                 print("You Died. Game Over")
                 self.alive = False
+        else:
+            if used_item == required_item:
+                print("You did it")
+                room.has_encounter = False
+                room.has_event = False
+            else:
+                sleep(2)
+                print("It did not work")
+                self.trigger_event(room, required_item)
         
        
