@@ -1,4 +1,6 @@
 import map
+from time import sleep
+import os
 
 class Player:
     """
@@ -15,12 +17,19 @@ class Player:
         self.actions = actions
     
     def validate_input(self, input, type_err_message, val_err_message):
-        """ Method to validate user input when prompted"""
+        """
+        Method to validate user input when prompted.
+        Will raise a Type Error or Value Error for invalid inputs.
+        Prints a message relevant to error type.
+        """
         try:
+            # Check if user enters exit at any input phase
             if input == "exit":
                 return
+            # Check that only numbers and letter are used
             if not input.isalnum():
                 raise TypeError
+            # Control the length of the input
             elif len(input) < 2 or len(input) > 22:
                 raise ValueError
         
@@ -41,8 +50,8 @@ class Player:
         areas = room.searchable_areas
         # a list of possible actions
         actions = [
-            "MOVE", "CHECK", "ATTACK",
-            "LOOK", "FIGHT", "EXIT", "SEARCH"
+            "SEARCH", "MOVE", "CHECK", 
+            "LOOK", "USE", "DESCRIBE", "EXIT", 
         ]
 
         while game:
@@ -57,20 +66,31 @@ class Player:
                 "That is not a valid action. Try again\n") == False:
                     continue
             # Removing case sensitivity and checking for valid actions
-            if user_action.upper() in actions:
-                if user_action == "search":
+            user_action = user_action.upper()
+            if user_action in actions:
+                if user_action == actions[0]:
                     # Calling the search method
+                    os.system('cls')
                     self.search(room, areas)
-                elif user_action == "move":
+                elif user_action == actions[1]:
                     # calling the move_to_room method
+                    os.system('cls')
                     self.move_to_room(room, "")
-                elif user_action == "check":
+                elif user_action == actions[2]:
                     # Calling the check_inventory method
+                    os.system('cls')
                     self.check_inventory()
-                elif user_action == "look":
+                elif user_action == actions[3]:
                     # Calling the look method
+                    os.system('cls')
                     self.look(self.current_room)
-                elif user_action == "exit":
+                elif user_action == actions[4]:
+                    os.system('cls')
+                    self.use_item(self.inventory)
+                elif user_action == actions[5]:
+                    os.system('cls')
+                    room.describe_room()
+                elif user_action == actions[6]:
                     print("Exiting")
                     game = False
             else:
@@ -93,6 +113,7 @@ class Player:
 
         # sets the player name for the instance of the player
         self.name = player_name
+        print(f"Hello, {player_name}. Your journey begins in: ")
         return player_name
 
     def search(self, room, areas):
@@ -106,7 +127,8 @@ class Player:
 
         if place_to_look.lower() in str(areas):
             # give user feedback
-            print(f"you search the {place_to_look}")
+            print(f"You search the {place_to_look}...")
+            sleep(3)
             # checking if the user is searching the item_location
             if place_to_look == item_location and not room.item_found:
                 item = room.inventory
@@ -142,13 +164,18 @@ class Player:
         print(f"You have picked up the {new_item}")
         self.inventory.append(new_item)
         
-
     def discard_item(self, item):
         # removes item from inventory
         self.inventory.pop(item)
         print("As soon as the item hits the ground, it mysteriously vanishes")
 
-    def use_item(self, item):
+    def use_item(self, inventory):
+        if len(inventory) > 0:
+
+            print("What would you like to use?: ")
+            print(*inventory)
+        else:
+            print("You haven't got anything to use.")
         pass
 
     def move_to_room(self, current_room, direction):
@@ -167,18 +194,25 @@ class Player:
             # Repeating method until valid input is given
             self.move_to_room(self.current_room, " ")
 
+        direction = direction.lower()
         # referencing the current rooms posible paths
         links = current_room.linked_rooms
         # checking if the user has chosen a possible cardinal direction
-        if direction.lower() in links:
+        if direction in links:
+            # Setting current_room as has_been_visted
+            current_room.has_been_visited = True
             # Setting the new_name variable as the value stored in the in the links key 
             new_name = links[direction]
             # Calling the generate_room_from_name function to return the associated room object
             new_room = map.generate_room_from_name(new_name)
-            # Setting the player's current room to the new_room
-            self.current_room = new_room
-            # Describing the new room to the user
-            new_room.describe_room()    
+            if new_room.required_item in self.inventory:
+                # Setting the player's current room to the new_room
+                self.current_room = new_room
+                # Describing the new room to the user
+                new_room.describe_room()
+            else:
+                print("You cannot go that way... yet")
+                return
         else:
-            print("Wah wah")
+            print("That is not a possible path.")
             self.move_to_room(self.current_room, " ")
