@@ -13,11 +13,11 @@ cottage = room.Room(
     "The Cottage",
     # Room decription
     """
-    A small, rustic, thach rooved house.
+    A small, rustic, thatch roofed house.
     It's barren interior only hinting at a life which once resided within.
     In the western corner of the room you see a bookshelf.
-    in the center of the room there is a large bed.
-    Next to the bed, there is a cabinet
+    In the center of the room there is a large bed.
+    Next to the bed, there is a cabinet.
     """,
     # Path description; tells user which directions are possible
     """
@@ -35,6 +35,8 @@ cottage = room.Room(
     # Items required to enter this room 
     None,
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
     )
 
@@ -52,11 +54,10 @@ woods = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    To the North, is an overgrown path which weaves,
-    seemingly endlessly, into the abyss of the woods.
+    To the North is an overgrown, but visible, trail.
     South leads back to the cottage.
-    To the East, a path darker still than that which you have come.
-    To your West, sunlight stream through the trees.
+    To the East, the trees blacken and light itsekf is swallowed.
+    To your West, sunlight streams through the trees.
     """,
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("broken sword"),
@@ -70,6 +71,8 @@ woods = room.Room(
     # Items required to enter this room 
     "cottage key",
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
 )
 
@@ -101,10 +104,82 @@ village_path = room.Room(
     None,
     # Links to other rooms
     {"north": "The Abandoned Church", "south": "The Woods",
-        "east": "The River", "west": "The Dark Wood"},
+        "east": "The Village", "west": "The River"},
     # Items required to enter this room 
-    None,
+    "",
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
+    False
+)
+
+# Creating a river Room
+river = room.Room(
+    # Room name    
+    "The River",
+    # Room decription
+    f"""
+    The tranquil trum of the water against the rock
+    brings peace to your mind. You feel the crushing weight 
+    of your situation lift from your chest. Nearby you see
+    a shape up river. It begins gaining momentum.
+    Before long the shape is upon you, a goblin, armed with a mace.
+    He swings the mace, barely missing you. It's a fight.
+    How will you respond?
+    """,
+    # Path description; tells user which directions are possible
+    f"""
+    East leads back to the village path.
+    North, the path winds beyond your vision.
+    """,
+    # Calls the return_item function from the item script and adds it to the room inventory
+    item.return_item("mace"),
+    # List of searchable areas 
+    ["goblin corpse"],
+    # Where the item can be found 
+    None,
+    # Links to other rooms
+    {"north": "The Abandoned Church", "east": "The Village Path"},
+    # Items required to enter this room 
+    "shortsword",
+    # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
+    False
+)
+
+# Creating a village Room
+village = room.Room(
+    # Room name    
+    "The Village",
+    # Room decription
+    f"""
+    Decay and time have had their way with this place.
+    The wood frames have become blackened with mold.
+    Mycelium and fungus intricately weave through every inch of
+    walls, the doors of each bungalow ling since turned to mush.
+    As you amble back and forth trough the houses, you spot a rusted
+    metal chest; inoculated against the worst of the decay. 
+    """,
+    # Path description; tells user which directions are possible
+    f"""
+    West leads back to the village path.
+    South, the darkness of thick forestry envelops your vision.
+    North you can see the spire eeking above the trees.
+    """,
+    # Calls the return_item function from the item script and adds it to the room inventory
+    item.return_item("shortsword"),
+    # List of searchable areas 
+    ["rusted chest"],
+    # Where the item can be found 
+    None,
+    # Links to other rooms
+    {"south": "The Abandoned Church"},
+    # Items required to enter this room 
+    "broken sword",
+    # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
 )
 
@@ -131,18 +206,19 @@ chruch = room.Room(
     West of the church is a clearing of some sort.
     """,
     # Calls the return_item function from the item script and adds it to the room inventory
-    [item.return_item("book"), item.return_item("torch")],
+    item.return_item("torch"),
     # List of searchable areas 
     ["pulpit", "tabernacle", "table"],
     # Where the item can be found 
     None,
     # Links to other rooms
-    {"south": "The Village Path", "east": "The Village", "west": "The Clearing"},
+    {"south": "The Village Path", "east": "The Village", "west": "The River"},
     # Items required to enter this room 
     None,
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
-
 )
 
 # Creating a dark_woods Room
@@ -151,82 +227,114 @@ dark_woods = room.Room(
     "The Dark Woods",
     # Room decription
     f"""
-    Description of the dark woods
+    Even with the light of the torch, the darkness pervades.
+    Shadows and imagined beasts dance in your periferies,
+    shaking you to your core with each movement.
+    Wind twists through the trees creating a cacophony of hollow tones.
+    The macabre sounds dig into your psyche. You could swear that there 
+    are voices calling out to you in anguish. Efforts to steel yourself
+    are undone by the dark woodwind orchestra baying at you.
     """,
     # Path description; tells user which directions are possible
     f"""
-    Description of the possible paths
+    North seems to be nothing but more darkness.
+    South of you, you could swear you saw a flicker of light.
+    East is a beaten path that twists back and forth.
+    West is the direction you came from.
     """,
     # Calls the return_item function from the item script and adds it to the room inventory
-    [item.return_item("shortsword"), item.return_item("rope")],
+    item.return_item("arrows"),
     # List of searchable areas 
     ["black tree", "shiny object"],
     # Where the item can be found 
     None,
     # Links to other rooms
-    {"south": "The Village Path", "east": "The Village", "west": "The Clearing"},
+    {"south": "The Clearing", "east": "The Village", "west": "The Woods"},
     # Items required to enter this room 
     "torch",
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
 )
 
-river = room.Room(
-    # Room name    
-    "The River",
-    # Room decription
-    f"""
-    Description of the river
-    """,
-    # Path description; tells user which directions are possible
-    f"""
-    Description of the possible paths
-    """,
-    # Calls the return_item function from the item script and adds it to the room inventory
-    [item.return_item("note"), item.return_item("arrows")],
-    # List of searchable areas 
-    ["black tree", "shiny object"],
-    # Where the item can be found 
-    None,
-    # Links to other rooms
-    {"south": "The Village Path"},
-    # Items required to enter this room 
-    "broken sword",
-    # Defaulting to false for item found 
-    False
-)
-
+# Creating a glade Room
 glade = room.Room(
     # Room name    
     "The Glade",
     # Room decription
     f"""
-    Description of the glade
+    A small lake is encircled by vibrantly colored trees.
+    The lake itself is teeming with life which, when approached,
+    falls silent. Each cluster of trees is a gradient from lush green
+    to a soft amber. Hues of brown and purple dotted throughout.
     """,
     # Path description; tells user which directions are possible
     f"""
-    Description of the possible paths
+    East leads back towords the woods.
+    Thick forestry envelops all other directions.
     """,
     # Calls the return_item function from the item script and adds it to the room inventory
-    [item.return_item("golden key"), item.return_item("bow")],
+    item.return_item("rusted key"),
     # List of searchable areas 
-    ["black tree", "shiny object"],
+    ["green trees", "orange trees", "red trees", "lake"],
     # Where the item can be found 
     None,
     # Links to other rooms
-    {"south": "The Abandoned Church"},
+    {"east": "The Woods"},
     # Items required to enter this room 
     "broken sword",
     # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
     False
 )
 
+# Creating a clearing Room
+clearing = room.Room(
+    # Room name    
+    "The Clearing",
+    # Room decription
+    f"""
+    The wood seems to suddenly break apart here.
+    Sunlight floods down upon you. You feel invigerated.
+    The maddening darkness of the dark woods slides off you.
+    You breath deeply. A small circle of stones hints at an old
+    campsite fire. Logs encircle the fire; makeshift seats.
+    There's an old lean-to just on the edge of the woods.
+    """,
+    # Path description; tells user which directions are possible
+    f"""
+    North is the direction you came from.
+    All other directions look no different.
+    """,
+    # Calls the return_item function from the item script and adds it to the room inventory
+    item.return_item("bow"),
+    # List of searchable areas 
+    ["lean-to"],
+    # Where the item can be found 
+    None,
+    # Links to other rooms
+    {"north": "The Dark Woods"},
+    # Items required to enter this room 
+    "broken sword",
+    # Defaulting to false for item found 
+    False,
+    # Defaulting to false for has_been_visited
+    False
+) 
+
 # a set of all room objects
 all_rooms = {
-    cottage, woods, village_path, chruch, dark_woods, river, glade
+    cottage, woods, village_path, river, village,
+    chruch, dark_woods, glade, clearing
 }
 
 def set_item_locations_for_each_room():
+    """
+    Function iterates through each room and runs 
+    the choose_random_item_location method for each room 
+    """
     for room in all_rooms:
         for item in room.inventory:
             item_location = room.choose_random_item_location(room.searchable_areas)
