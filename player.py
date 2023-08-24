@@ -135,7 +135,7 @@ class Player:
         # ask user where to look
         place_to_look = input("Where would you like to search?:\n")
 
-        if place_to_look.lower() in str(areas):
+        if place_to_look.lower() in areas:
             # give user feedback
             print(f"You search the {place_to_look}...")
             sleep(3)
@@ -187,22 +187,24 @@ class Player:
         if len(inventory) > 0:
             print(*inventory, sep= ", ")
             chosen_item = input("What would you like to use?:\n")
+            # Validating user input
             if self.validate_input(
                 chosen_item, 
                 "Not a valid selection. Please try again!",
                 "Not a valid selection. Please try again!",
                 ) == False:
-                self.use_item(self.inventory)
-            
-            chosen_item = chosen_item.lower()
-            if chosen_item in self.inventory:
-                print(f"You use the {chosen_item}")
-                
+                return
             else:
-                print("That's not in your inventory")
-                self.use_item(self.inventory)
-            
-            return chosen_item
+                # If valid
+                chosen_item = chosen_item.lower()
+                if chosen_item in self.inventory:
+                    print(f"You use the {chosen_item}")
+                elif chosen_item == "exit":
+                    return
+                else:
+                    print("That's not in your inventory")
+                    self.use_item(self.inventory)
+                return chosen_item
         else:
             print("You haven't got anything to use.")
 
