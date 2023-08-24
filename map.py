@@ -15,9 +15,9 @@ cottage = room.Room(
     """
     A small, rustic, thatch roofed house.
     It's barren interior only hinting at a life which once resided within.
-    In the western corner of the room you see a bookshelf.
-    In the center of the room there is a large bed.
-    Next to the bed, there is a cabinet.
+    In the western corner of the room you see a BOOKSHELF.
+    In the center of the room there is a large BED.
+    Next to the BED, there is a CABINET.
 
     """,
     # Path description; tells user which directions are possible
@@ -30,7 +30,7 @@ cottage = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("cottage key"),
     # List of searchable areas 
-    ["bookshelf", "cabinet", "bed"],
+    ["BOOKSHELF", "CABINET", "BED"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -57,7 +57,7 @@ woods = room.Room(
     Barely a speck of sunlight can be seen.
     Your eyes struggle to focus. Your legs carry you forward, like
     some sort of wretched automoton. Soon, you come to a fork in the woods.
-    A thick net of brambles seems to conceal a glimmer.
+    A thick net of BRAMBLES seems to conceal a glimmer.
 
     """,
     # Path description; tells user which directions are possible
@@ -73,7 +73,7 @@ woods = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("broken sword"),
     # List of searchable areas 
-    ["brambles"],
+    ["BRAMBLES"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -102,7 +102,7 @@ village_path = room.Room(
     you feel your legs ache. You can't say how long you've been walking.
     Finally, mercifully, you see before you a spire of a church.
     You pasue and take a breather. You notice a deliberate formation of leaves.
-    There also seems to be a faint shimmer by a nearby tree.
+    There also seems to be a faint shimmer by an ODD TREE.
 
     """,
     # Path description; tells user which directions are possible
@@ -118,7 +118,7 @@ village_path = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("rusted key"),
     # List of searchable areas 
-    ["leaf pile", "nearby tree"],
+    ["LEAF PILE", "ODD TREE"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -164,7 +164,7 @@ river = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("mace"),
     # List of searchable areas 
-    ["goblin corpse"],
+    ["DEAD GOBLIN"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -203,13 +203,13 @@ village = room.Room(
     # Event description
     """
     As you amble back and forth trough the houses, you spot a rusted
-    metal chest; inoculated against the worst of the decay. 
+    metal CHEST; inoculated against the worst of the decay. 
 
     """,
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("shortsword"),
     # List of searchable areas 
-    ["rusted chest"],
+    ["RUSTED CHEST"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -237,9 +237,9 @@ chruch = room.Room(
     befallen the sanctuary. The door is all but rotted away and with a
     gentle push, it leaves its hinges, flopping to the floor before you.
     Its vast, cavernous halls amplify the wind, invoking a thunderous bellow.
-    The pulpit still stands just off-centered, giving way to the vast
-    table of worship. Behind the table, the unmistakable shimmer of
-    the tabernacle glistens.
+    The PULPIT still stands just off-centered, giving way to the vast
+    TABLE of worship. Behind the TABLE, the unmistakable shimmer of
+    the TABERNACLE glistens.
 
     """,
     # Path description; tells user which directions are possible
@@ -254,7 +254,7 @@ chruch = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("torch"),
     # List of searchable areas 
-    ["pulpit", "tabernacle", "table"],
+    ["PULPIT", "TABERNACLE", "TABLE"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -284,6 +284,7 @@ dark_woods = room.Room(
     The macabre sounds dig into your psyche. You could swear that there 
     are voices calling out to you in anguish. Efforts to steel yourself
     are undone by the dark woodwind orchestra baying at you.
+    Before you stands twisted BLACK TREE.
 
     """,
     # Path description; tells user which directions are possible
@@ -304,7 +305,7 @@ dark_woods = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("arrows"),
     # List of searchable areas 
-    ["black tree", "shiny object"],
+    ["BLACK TREE", "DEAD WOLF"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -327,9 +328,9 @@ glade = room.Room(
     "The Glade",
     # Room decription
     f"""
-    A small lake is encircled by vibrantly colored trees.
-    The lake itself is teeming with life which, when approached,
-    falls silent. Each cluster of trees is a gradient from lush green
+    A small LAKE is encircled by vibrantly colored TREES.
+    The LAKE itself is teeming with life which, when approached,
+    falls silent. Each cluster of TREES is a gradient from lush green
     to a soft amber. Hues of brown and purple dotted throughout.
 
     """,
@@ -343,7 +344,7 @@ glade = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("rusted key"),
     # List of searchable areas 
-    ["green trees", "orange trees", "red trees", "lake"],
+    ["GREEN TREES", "ORANGE TREES", "RED TREES", "LAKE"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -419,7 +420,6 @@ def set_item_locations_for_each_room():
             room.item_location = item_location
     
     return item_location
-
 
 def generate_room_from_name(name):
     """

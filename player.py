@@ -131,17 +131,21 @@ class Player:
         room = self.current_room
         item_location = room.item_location
         areas = room.searchable_areas
-        print(*room.searchable_areas, sep = ", ")
+        print("You might find something here:\n")
+        print(*areas, sep=" \t")
+
         # ask user where to look
         place_to_look = input("Where would you like to search?:\n")
+        place_to_look = place_to_look.upper()
 
-        if place_to_look.lower() in areas:
+        if place_to_look in areas:
             # give user feedback
-            print(f"You search the {place_to_look}...")
-            sleep(3)
+            print(f"You search the {place_to_look}...\n")
+            sleep(2)
             # checking if the user is searching the item_location
             if place_to_look == item_location and not room.item_found:
                 item = room.inventory
+                item = item.upper()
                 print(f"You found the {item}\n")
                 room.item_found = True
                 # Calling the pick_up_item method to add the item to inventory
@@ -170,6 +174,7 @@ class Player:
         Method to update the player's inventory with a
         new item, determined by the room the player is in.
         """
+        new_item = new_item.upper()
         # append a dictionary entry to the player's inventory
         print(f"You have picked up the {new_item}\n")
         self.inventory.append(new_item)
