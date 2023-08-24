@@ -1,4 +1,6 @@
 import random
+from time import sleep
+import sys
 
 class Room:
     """
@@ -8,7 +10,8 @@ class Room:
     """
     def __init__(
                 self, name, description, path_descriptions, inventory,
-                searchable_areas, item_location, linked_rooms, required_item, item_found
+                searchable_areas, item_location, linked_rooms, required_item, 
+                item_found, has_been_visited
                 ):
         self.name = name
         self.description = description
@@ -19,20 +22,35 @@ class Room:
         self.linked_rooms = linked_rooms
         self.required_item = required_item
         self.item_found = item_found
+        self.has_been_visited = has_been_visited
+
+    def type_descritions(self, description):
+        """
+        Method gives a typed effect to the desription when 
+        the user first visits the room.
+        On subsequent visits, the desriction is simply printed.
+        """
+        if not self.has_been_visited:
+            for char in description:
+                sleep(0.02)
+                sys.stdout.write(char)
+                sys.stdout.flush()
+        else:
+            print(description)
 
     def describe_room(self):
         """
         Describes the instance of a room.
         """
         print(self.name)
-        print(self.description)
+        self.type_descritions(self.description)
 
     def describe_paths(self):
         """
         Describes the North, South, East and West paths from current room
         """
         print(self.name)
-        print(self.path_descriptions)
+        self.type_descritions(self.path_descriptions)
 
     def choose_random_item_location(self, searchable_areas):
         """
