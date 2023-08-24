@@ -156,7 +156,7 @@ class Player:
                 # issue: the item_location is randomized each time
                 self.search(self.current_room,
                             self.current_room.searchable_areas)
-        elif place_to_look == "exit":
+        elif place_to_look == "EXIT":
                 return
         else:
             print("That is not an area. Try again\n")
@@ -199,7 +199,7 @@ class Player:
                 chosen_item = chosen_item.upper()
                 if chosen_item in self.inventory:
                     print(f"You use the {chosen_item}\n")
-                elif chosen_item == "exit":
+                elif chosen_item == "EXIT":
                     return
                 else:
                     print("That's not in your inventory\n")
