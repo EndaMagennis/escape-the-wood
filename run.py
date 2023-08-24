@@ -1,5 +1,7 @@
 import player
 import map
+import sys
+from time import sleep
 
 # variable to store the intro of the game
 intro = f"""
@@ -12,14 +14,19 @@ intro = f"""
     Now piece yourself together. Who are you?'
 
     Your head begins swimming; the past rushing to meet the present.
-    You suddenely remember yourself."""
+    You suddenely remember yourself.
+    """
 
 # instantiating the player
 current_player = player.Player("", [], map.generate_room_from_name("The Cottage"), [])
 
 
 def main():
-    print(intro)
+    for char in intro:
+        sleep(0.02)
+        sys.stdout.write(char)
+        sys.stdout.flush()
+
     map.set_item_locations_for_each_room()
     current_player.name_player()
     current_player.current_room.describe_room()
