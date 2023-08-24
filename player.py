@@ -196,7 +196,7 @@ class Player:
                 return
             else:
                 # If valid
-                chosen_item = chosen_item.lower()
+                chosen_item = chosen_item.upper()
                 if chosen_item in self.inventory:
                     print(f"You use the {chosen_item}\n")
                 elif chosen_item == "exit":
