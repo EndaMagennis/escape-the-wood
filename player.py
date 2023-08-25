@@ -156,7 +156,6 @@ class Player:
         # Cycle through each area
         for x in possible_areas:
             # Check for a partial string match of the area
-            
             if player_choice in x:
                 # Set player_choice to the full string
                 player_choice = x
@@ -169,20 +168,23 @@ class Player:
                     room.item_found = True
                     # Give user feedback
                     print(f"You found the {room.inventory.upper()}")
-                    sleep(1)
+                    sleep(2)
                     # Call the pick_up_item method
                     self.pick_up_item(room.inventory.upper())
                 else:
                     print(f"You found nothing")
-                    sleep(1)
+                    sleep(2)
                     # Repeats the method
                     self.search(room)
             elif player_choice == "EXIT":
                 return
             else:
-                # Continuing cycle if first list item is not a match
+                # Continuing cycle until a match is found
                 continue
-
+        if not player_choice in possible_areas:
+                print("You must be confused. Thats not a valid choice")
+                sleep(2)
+            
     def check_inventory(self):
         # First clears the terminal
         game_environment.clear_terminal()
@@ -280,6 +282,9 @@ class Player:
                     # Setting the player's current room to the new_room
                     self.current_room = new_room
                     # Describing the new room to the user
+                    print(f"You have chosen to go {direction.upper()}...")
+                    sleep(3)
+                    game_environment.clear_terminal()
                     new_room.describe_room()
                     if new_room.has_event:
                         self.trigger_event(new_room, new_room.required_item)
@@ -288,6 +293,9 @@ class Player:
                     return
             else:
                 continue
+        if not direction in links:
+            print(f"You and I both know that {direction} is not a direction")
+            sleep(2)
 
     def trigger_event(self, room, required_item):
         room = self.current_room
