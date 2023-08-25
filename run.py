@@ -45,14 +45,14 @@ current_player = player.Player("", [], map.generate_room_from_name("The Cottage"
 
 def main():
 
-    # print(logo)
-    # sleep(2)
-    # game_environment.clear_terminal()
+    print(logo)
+    sleep(2)
+    game_environment.clear_terminal()
 
-    # for char in intro:
-    #     sleep(0.02)
-    #     sys.stdout.write(char)
-    #     sys.stdout.flush()
+    for char in intro:
+        sleep(0.02)
+        sys.stdout.write(char)
+        sys.stdout.flush()
 
     map.set_item_locations_for_each_room()
     current_player.name_player()

@@ -134,8 +134,6 @@ class Player:
         # set the item_location
         item_location = room.item_location
 
-        # !!!!!!! Debug. Delete later
-        print(item_location)
         # Give the user the list of searchable areas
         print("These seem like worthy locations:\n")
         for area in possible_areas:
