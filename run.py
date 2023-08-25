@@ -1,7 +1,8 @@
 import player
 import map
-import sys
 import game_environment
+import os
+import sys
 from time import sleep
 
 # The main logo in ascii
@@ -44,16 +45,17 @@ current_player = player.Player("", [], map.generate_room_from_name("The Cottage"
 
 
 def main():
-
+    #turning off user inputs
+    os.system("stty -echo")
     print(logo)
     sleep(2)
-    game_environment.clear_terminal()
-
-    for char in intro:
+    for char in description:
         sleep(0.02)
         sys.stdout.write(char)
         sys.stdout.flush()
-
+    # Turn on user inputs
+    os.system("stty echo")
+    game_environment.clear_terminal()
     map.set_item_locations_for_each_room()
     current_player.name_player()
     current_player.current_room.describe_room()
