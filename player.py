@@ -259,7 +259,7 @@ class Player:
             "Sorry, that is not a valid direction\n"
             ) == False:
             # Repeating method until valid input is given
-            self.move_to_room(self.current_room, direction)
+            self.move_to_room(self.current_room)
 
         direction = direction.lower()
         if direction == "exit":
