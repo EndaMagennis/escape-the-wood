@@ -25,7 +25,7 @@ class Player:
         try:
             # Check if user enters exit at any input phase
             if input == "exit" or input == "EXIT":
-                return input
+                return
             # Check that only numbers and letter and spaces are used
             if not input.isalnum() and not input.isspace():
                 raise TypeError
@@ -70,38 +70,26 @@ class Player:
             user_action = user_action.upper()
             # Checking if user_action partially matches the action
             if user_action in actions[0]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the search method
-                self.search()
+                self.search(self.current_room)
 
             elif user_action in actions[1]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the move_to_room method
-                self.move_to_room(room, "")
+                self.move_to_room(room)
 
             elif user_action in actions[2]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the check_inventory method
                 self.check_inventory()
 
             elif user_action in actions[3]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the look method
                 self.look()
 
             elif user_action in actions[4]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the use_item method
                 self.use_item(self.inventory)
 
             elif user_action in actions[5]:
-                # Clearing the terminal
-                game_environment.clear()
                 # Calling the describe_room method
                 self.current_room.describe_room()
 
@@ -134,8 +122,11 @@ class Player:
             print(f"Hello, {player_name}. Your journey begins in: ")
             return player_name
 
-    def search(self):
+    def search(self, room):
         """ Prompts user to search areas based on current room."""
+        # First clears the terminal
+        game_environment.clear_terminal()
+
         # Set room variable to current room
         room = self.current_room
         # Set possible areas to this room's searchable areas
@@ -167,29 +158,43 @@ class Player:
         # Cycle through each area
         for x in possible_areas:
             # Check for a partial string match of the area
+            
             if player_choice in x:
                 # Set player_choice to the full string
                 player_choice = x
                 # Give user feedback
                 print(f"You search the {x}")
                 sleep(2)
-        # Check if player has found the item and if item has not been found
-        if player_choice == item_location and not room.item_found:
-            # Set room.item_found to True
-            room.item_found == True
-            # Give user feedback
-            print(f"You found the {room.inventory.upper()}")
-            # Call the pick_up_item method
-            self.pick_up_item(room.inventory.upper())
-        else:
-            print(f"you found nothing")
-            # Repeats the method
-            self.search()
+                # Check if player has found the item and if item has not been found
+                if player_choice == item_location and room.item_found == False:
+                    # Set room.item_found to True
+                    room.item_found = True
+                    # Give user feedback
+                    print(f"You found the {room.inventory.upper()}")
+                    sleep(1)
+                    # Call the pick_up_item method
+                    self.pick_up_item(room.inventory.upper())
+                else:
+                    print(f"You found nothing")
+                    sleep(1)
+                    # Repeats the method
+                    self.search(room)
+            elif player_choice == "EXIT":
+                return
+            else:
+                # Continuing cycle if first list item is not a match
+                continue
 
     def check_inventory(self):
+        # First clears the terminal
+        game_environment.clear_terminal()
+
         print(f"You are currently holding:\n {self.inventory}\n")
 
     def look(self):
+        # First clears the terminal
+        game_environment.clear_terminal()
+
         pass
 
     def pick_up_item(self, new_item):
@@ -197,7 +202,9 @@ class Player:
         Method to update the player's inventory with a
         new item, determined by the room the player is in.
         """
-        new_item = new_item.upper()
+        # First clears the terminal
+        game_environment.clear_terminal()
+
         # append a dictionary entry to the player's inventory
         print(f"You have picked up the {new_item}\n")
         self.inventory.append(new_item)
@@ -207,6 +214,9 @@ class Player:
         Method prompts player to choose an item from their inventory.
         If it exists, it will return the item.
         """
+        # First clears the terminal
+        game_environment.clear_terminal()
+
         if len(inventory) > 0:
             print("You're currently holding:\n")
             print(*inventory, sep= ", ")
@@ -233,7 +243,9 @@ class Player:
         else:
             print("You haven't got anything to use.\n")
 
-    def move_to_room(self, current_room, direction):
+    def move_to_room(self, current_room):
+        # First clears the terminal
+        game_environment.clear_terminal()
 
         current_room = self.current_room
         # Describing the directional options to the user
@@ -254,28 +266,30 @@ class Player:
             return
         # referencing the current rooms posible paths
         links = current_room.linked_rooms
-        # checking if the user has chosen a possible cardinal direction
-        if direction in links:
-            # Setting current_room as has_been_visted
-            current_room.has_been_visited = True
-            # Setting the new_name variable as the value stored in the in the links key 
-            new_name = links[direction]
-            # Calling the generate_room_from_name function to return the associated room object
-            new_room = map.generate_room_from_name(new_name)
-            # Checking if user has the required item to move on
-            if new_room.required_item.upper() in self.inventory or new_room.has_event:
-                # Setting the player's current room to the new_room
-                self.current_room = new_room
-                # Describing the new room to the user
-                new_room.describe_room()
-                if new_room.has_event:
-                    self.trigger_event(new_room, new_room.required_item)
+
+        for link in links:
+            # checking if the user has entered a full or partial string for direction
+            if direction in link:
+                direction = link
+                # Setting current_room as has_been_visted
+                current_room.has_been_visited = True
+                # Setting the new_name variable as the value stored in the in the links key 
+                new_name = links[direction]
+                # Calling the generate_room_from_name function to return the associated room object
+                new_room = map.generate_room_from_name(new_name)
+                # Checking if user has the required item to move on
+                if new_room.required_item.upper() in self.inventory or new_room.has_event:
+                    # Setting the player's current room to the new_room
+                    self.current_room = new_room
+                    # Describing the new room to the user
+                    new_room.describe_room()
+                    if new_room.has_event:
+                        self.trigger_event(new_room, new_room.required_item)
+                else:
+                    print(f"You cannot go that way... yet\n")
+                    return
             else:
-                print(f"You cannot go that way... yet\n")
-                return
-        else:
-            print("That is not a possible path.\n")
-            self.move_to_room(self.current_room, " ")
+                continue
 
     def trigger_event(self, room, required_item):
         room = self.current_room
