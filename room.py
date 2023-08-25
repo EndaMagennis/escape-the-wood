@@ -1,6 +1,7 @@
 import random
 from time import sleep
 import sys
+import os
 
 class Room:
     """
@@ -34,12 +35,18 @@ class Room:
         On subsequent visits, the desriction is simply printed.
         """
         if not self.has_been_visited:
+            # Turn off user inputs while typing
+            os.system("stty -echo")
             for char in description:
                 sleep(0.02)
                 sys.stdout.write(char)
                 sys.stdout.flush()
+            # Turn on user inputs
+            os.system("stty echo")
         else:
+            os.system("stty -echo")
             print(description)
+            os.system("stty echo") 
 
     def describe_room(self):
         """
