@@ -2,6 +2,7 @@ import random
 from time import sleep
 import sys
 import os
+import termios
 
 class Room:
     """
@@ -43,10 +44,9 @@ class Room:
                 sys.stdout.flush()
             # Turn on user inputs
             os.system("stty echo")
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
         else:
-            os.system("stty -echo")
             print(description)
-            os.system("stty echo") 
 
     def describe_room(self):
         """
