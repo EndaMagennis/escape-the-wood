@@ -328,6 +328,7 @@ glade = room.Room(
     "The Glade",
     # Room decription
     f"""
+    Using the broken sword, you hack and slash at the thicket, creating a path.
     A small LAKE is encircled by vibrantly colored TREES.
     The LAKE itself is teeming with life which, when approached,
     falls silent. Each cluster of TREES is a gradient from lush green
@@ -342,7 +343,7 @@ glade = room.Room(
     """,
     None,
     # Calls the return_item function from the item script and adds it to the room inventory
-    item.return_item("rusted key"),
+    item.return_item("shortsword"),
     # List of searchable areas 
     ["GREEN TREES", "ORANGE TREES", "RED TREES", "LAKE"],
     # Where the item can be found 
@@ -418,6 +419,7 @@ def set_item_locations_for_each_room():
         for item in room.inventory:
             item_location = room.choose_random_item_location(room.searchable_areas)
             room.item_location = item_location
+            room.has_been_visited = True
     
     return item_location
 
