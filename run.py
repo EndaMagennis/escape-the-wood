@@ -49,7 +49,7 @@ def main():
     os.system("stty -echo")
     print(logo)
     sleep(2)
-    for char in description:
+    for char in intro:
         sleep(0.02)
         sys.stdout.write(char)
         sys.stdout.flush()
