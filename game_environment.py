@@ -15,3 +15,15 @@ def clear_terminal():
     # for mac and linux(here, os.name is 'posix')
     else:
         command = system('clear')
+
+def check_for_partial_match(input, this_list, list_item, negative_statement):
+
+    for list_item in this_list:
+        if input in list_item:
+            return list_item
+        else:
+            continue
+    
+    if not input in this_list:
+        print(negative_statement)
+        return
