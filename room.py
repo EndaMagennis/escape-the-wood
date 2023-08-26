@@ -2,7 +2,6 @@ import random
 from time import sleep
 import sys
 import os
-import termios
 
 class Room:
     """
@@ -44,16 +43,16 @@ class Room:
                 sys.stdout.flush()
             # Turn on user inputs
             os.system("stty echo")
-            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
         else:
             print(description)
 
     def describe_room(self):
-        """
-        Describes the instance of a room.
-        """
+        """Describes the instance of a room."""
+
         print(self.name)
+        # Call the type_descriptions method, passing this rooms description
         self.type_descritions(self.description)
+        # Call the describe_event for this room 
         self.describe_event()
 
     def describe_paths(self):
@@ -61,23 +60,26 @@ class Room:
         Describes the North, South, East and West paths from current room
         """
         print(self.name)
+        # Call the type_descriptions method, passing this room's path_description
         self.type_descritions(self.path_descriptions)
 
     def describe_event(self):
+        """Method checks for event and prints to terminal"""
+
         if self.has_event:
             self.type_descritions(self.event_description)
         else:
             return
 
     def choose_random_item_location(self, searchable_areas):
-        """
-        Randomly selects which of the searchable areas holds the item
-        """
+        """Randomly selects which of the searchable areas holds the item"""
+
+        # Set the searchable areas to this room's searchable area
         searchable_areas = self.searchable_areas
-        # choosing a random area to place the item
+        # Choosing a random area to place the item
         random_choice = random.randint(0, len(searchable_areas) - 1)
         selected_area = searchable_areas[random_choice]
 
-        # setting the room's item_location to the selected_area
+        # Setting the room's item_location to the selected_area
         self.item_location = selected_area
         return selected_area
