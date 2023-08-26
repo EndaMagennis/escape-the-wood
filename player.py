@@ -1,5 +1,6 @@
 import map
 import game_environment
+import item
 from time import sleep
 
 class Player:
@@ -9,12 +10,11 @@ class Player:
     and name.
     """
 
-    def __init__(self, name, inventory, current_room, actions):
+    def __init__(self, name, inventory, current_room):
         """ Initialises an instance of the player """
         self.name = name
         self.inventory = inventory
         self.current_room = current_room
-        self.actions = actions
     
     def validate_input(self, input, type_err_message, val_err_message):
         """
@@ -83,7 +83,7 @@ class Player:
 
             elif user_action in actions[3]:
                 # Calling the look method
-                self.look()
+                self.look(self.inventory)
 
             elif user_action in actions[4]:
                 # Calling the use_item method
@@ -148,42 +148,29 @@ class Player:
             f"Surely you understand that it is impossible to search a {player_choice}. Try using letters.",
             "I need at least 2 letters to understand where you're looking."
             ) == False:
-            self.search()
+            return
 
         # If valid set to uppercase to match against searchable areas
         player_choice = player_choice.upper()
 
-        # Cycle through each area
-        for x in possible_areas:
-            # Check for a partial string match of the area
-            if player_choice in x:
-                # Set player_choice to the full string
-                player_choice = x
+        outcome = game_environment.check_for_partial_match(player_choice, possible_areas, area, f"Surely you know {player_choice} isn't a choice?")
+        if outcome in possible_areas:
+            player_choice = outcome
+            print(f"You search the {player_choice}")
+            sleep(2)
+            if player_choice == item_location and room.item_found == False:
+                room.item_found = True
                 # Give user feedback
-                print(f"You search the {x}")
+                print(f"You found the {room.inventory.upper()}")
                 sleep(2)
-                # Check if player has found the item and if item has not been found
-                if player_choice == item_location and room.item_found == False:
-                    # Set room.item_found to True
-                    room.item_found = True
-                    # Give user feedback
-                    print(f"You found the {room.inventory.upper()}")
-                    sleep(2)
-                    # Call the pick_up_item method
-                    self.pick_up_item(room.inventory.upper())
-                else:
-                    print(f"You found nothing")
-                    sleep(2)
-                    # Repeats the method
-                    self.search(room)
-            elif player_choice == "EXIT":
-                return
+                # Call the pick_up_item method
+                # Set room.item_found to True
+                self.pick_up_item(room.inventory.upper())
             else:
-                # Continuing cycle until a match is found
-                continue
-        if not player_choice in possible_areas:
-                print("You must be confused. Thats not a valid choice")
+                print(f"You found nothing")
                 sleep(2)
+                # Repeats the method
+                self.search(room)
             
     def check_inventory(self):
         # First clears the terminal
@@ -191,11 +178,39 @@ class Player:
 
         print(f"You are currently holding:\n {self.inventory}\n")
 
-    def look(self):
+    def look(self, inventory):
+        """A method which prints the chosen item description if player has item in inventory"""
         # First clears the terminal
         game_environment.clear_terminal()
-
-        pass
+        # Check that there is something in the inventory
+        if len(inventory) > 0:
+            # Print the inventory
+            print("What would you like to look at?\n")
+            print(*inventory, sep= ", ")
+            # Prompt user to choose an item
+            chosen_item = input("\n")
+            # Validate user input
+            if self.validate_input(
+                chosen_item,
+                f"It's impossible to hold a {chosen_item}. Try words.",
+                "I need at least 2 letters of what you're looking for."
+            ) == False: 
+                return
+            else:
+                chosen_item = chosen_item.upper()
+                for this_item in inventory:
+                    if chosen_item in this_item:
+                        chosen_item = this_item
+                        chosen_item = chosen_item.lower()
+                        outcome = item.return_item_description(chosen_item)
+                        print(f"{chosen_item.upper()}\n{outcome.capitalize()}")
+                        sleep(2)
+                    else:
+                        continue
+                if chosen_item.upper() not in inventory:
+                    print("WahWah")
+        else:
+            print("You haven't got anything")
 
     def pick_up_item(self, new_item):
         """
@@ -214,9 +229,6 @@ class Player:
         Method prompts player to choose an item from their inventory.
         If it exists, it will return the item.
         """
-        # First clears the terminal
-        game_environment.clear_terminal()
-
         if len(inventory) > 0:
             print("You're currently holding:\n")
             print(*inventory, sep= ", ")
@@ -235,6 +247,9 @@ class Player:
                     continue
                 if chosen_item in x:
                     print(f"You use the {x}")
+                    # Set partial choice to full choice
+                    chosen_item = x
+                    return chosen_item
                 elif chosen_item == "EXIT":
                     return
                 else:
@@ -284,9 +299,20 @@ class Player:
                     # Describing the new room to the user
                     print(f"You have chosen to go {direction.upper()}...")
                     sleep(3)
+                    # Clearing the terminal
                     game_environment.clear_terminal()
+
+                    # Checking if new room is The Dark Woods
+                    if new_room.name == "The Dark Woods" and not new_room.has_been_visited:
+                        # Changing the has_event of the dark wood
+                        new_room.has_event = True
+                        # Changing the required item for the encounter
+                        new_room.required_item = "mace"
+
                     new_room.describe_room()
+                    
                     if new_room.has_event:
+                        sleep(2)
                         self.trigger_event(new_room, new_room.required_item)
                 else:
                     print(f"You cannot go that way... yet\n")
@@ -301,20 +327,24 @@ class Player:
         room = self.current_room
         required_item = room.required_item
         used_item = self.use_item(self.inventory)
-        used_item = used_item.upper()
+        used_item = used_item.lower()
+        print(used_item)
+        print(required_item)
         # Check for an encounter
         if room.has_encounter:
-            if used_item == required_item.upper():
+            if used_item == required_item:
                 print("...")
                 sleep(2)
-                print("You did it\n")
+                print("You bested the beast!")
                 room.has_encounter = False
                 room.has_event = False
             else:
+                print("...")
+                sleep(2)
                 print("You Died. Game Over\n")
                 self.alive = False
         else:
-            if used_item == required_item.upper():
+            if used_item == required_item:
                 print("...")
                 sleep(2)
                 print("You did it\n")
