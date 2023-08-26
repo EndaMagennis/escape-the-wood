@@ -419,7 +419,7 @@ def set_item_locations_for_each_room():
         for item in room.inventory:
             item_location = room.choose_random_item_location(room.searchable_areas)
             room.item_location = item_location
-    
+
     return item_location
 
 def generate_room_from_name(name):

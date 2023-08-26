@@ -4,6 +4,7 @@ import game_environment
 import os
 import sys
 from time import sleep
+import item
 
 # The main logo in ascii
 logo ="""
@@ -40,25 +41,34 @@ intro = f"""
     You suddenely remember yourself.
     """
 
-# Instantiating the player
-current_player = player.Player("", [], map.generate_room_from_name("The Cottage"), [])
+# Instantiating the player with no name, with no inventory, in the Cottage
+current_player = player.Player("", [], map.generate_room_from_name("The Cottage"))
 
 
 def main():
-    #turning off user inputs
+        
+    # Turning off user inputs
     os.system("stty -echo")
+    # Printing logo
     print(logo)
+    # Waiting 2 seconds
     sleep(2)
+    # Clearing the terminal
+    game_environment.clear_terminal()
+    # Typing the intro
     for char in intro:
         sleep(0.02)
         sys.stdout.write(char)
         sys.stdout.flush()
-    # Turn on user inputs
+    # Turning  on user inputs
     os.system("stty echo")
-    game_environment.clear_terminal()
+    # Setting item_locations
     map.set_item_locations_for_each_room()
+    # Calling player.Player.name_player method
     current_player.name_player()
+    # Describing current room
     current_player.current_room.describe_room()
+    # Running game
     current_player.register_user_inputs()
 
 
