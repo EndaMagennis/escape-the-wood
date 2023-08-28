@@ -4,7 +4,6 @@ import game_environment
 import os
 import sys
 from time import sleep
-import item
 
 # The main logo in ascii
 logo ="""

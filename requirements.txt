@@ -2,7 +2,6 @@ altgraph==0.17.3
 cachetools==5.3.1
 certifi==2023.7.22
 charset-normalizer==3.2.0
-colorama==0.4.6
 google-auth==2.22.0
 google-auth-oauthlib==1.0.0
 gspread==5.10.0
