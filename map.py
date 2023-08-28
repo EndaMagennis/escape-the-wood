@@ -110,7 +110,7 @@ village_path = room.Room(
     NORTH of you is the church spire, jutting out above the canopy.
     SOUTH leads back to the woods.
     EAST, the path contiues, more certain, and prominent.
-    WEST of you, the sound of water can be faintly heard.
+    WEST of you, the sound of flowing water can be faintly heard.
 
     """,
     # Event description

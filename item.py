@@ -15,7 +15,7 @@ FINDABLE_ITEMS = {
             Theobald Bantreck's Rules for Survival:
 
         Always be prepared to meet a goblin by flowing water
-        They have been know for ransacking unsuspecting people. 
+        They have been known to ransack unsuspecting people by rivers. 
         A sharp blade is usually more than enough to deal with them.
         """,
     },
