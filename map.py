@@ -22,7 +22,7 @@ cottage = room.Room(
     """,
     # Path description; tells user which directions are possible
     """
-    Outside, north of you, appears to be a woodland.
+    Outside, NORTH of you, appears to be a woodland.
     However, the door appears to be locked.
 
     """,
@@ -62,10 +62,10 @@ woods = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    To the North is an overgrown, but visible, trail.
-    South leads back to the cottage.
-    To the East, the trees blacken as the light itself is swallowed.
-    To your West, sunlight streams through the trees, 
+    To the NORTH is an overgrown, but visible, trail.
+    SOUTH leads back to the cottage.
+    To the EAST, the trees blacken as the light itself is swallowed.
+    To your WEST, sunlight streams through the trees, 
     though overgrowth blocks your way.
 
     """,
@@ -107,10 +107,10 @@ village_path = room.Room(
     """,
     # Path description; tells user which directions are possible
     """
-    North of you is the church spire, jutting out above the canopy.
-    South leads back to the woods.
-    East, the path contiues, more certain, and prominent.
-    West of you, the sound of water can be faintly heard.
+    NORTH of you is the church spire, jutting out above the canopy.
+    SOUTH leads back to the woods.
+    EAST, the path contiues, more certain, and prominent.
+    WEST of you, the sound of water can be faintly heard.
 
     """,
     # Event description
@@ -149,8 +149,8 @@ river = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    East leads back to the village path.
-    North, the path winds beyond your vision.
+    EAST leads back to the village path.
+    NORTH, the path winds beyond your vision.
 
     """,
     # Event description
@@ -195,9 +195,9 @@ village = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    West leads back to the village path.
-    South, the darkness of thick forestry envelops your vision.
-    North you can see the spire eeking above the trees.
+    WEST leads back to the village path.
+    SOUTH, the darkness of thick forestry envelops your vision.
+    NORTH you can see the spire eeking above the trees.
 
     """,
     # Event description
@@ -244,9 +244,9 @@ chruch = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    South leads back to the village path.
-    East of the chuch the path is more prominently.
-    West of the church is a clearing of some sort.
+    SOUTH leads back to the village path.
+    EAST of the chuch the path is more prominently beaten.
+    WEST of the church, the faint sound of water can be heard.
 
     """,
     # Event description
@@ -289,10 +289,10 @@ dark_woods = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    North seems to be nothing but more darkness.
-    South of you, you could swear you saw a flicker of light.
-    East is a beaten path that twists back and forth.
-    West is the direction you came from.
+    NORTH seems to be nothing but more darkness.
+    SOUTH of you, you could swear you saw a flicker of light.
+    EAST is a beaten path that twists back and forth.
+    WEST is the direction you came from.
 
     """,
     # Event description
@@ -337,13 +337,13 @@ glade = room.Room(
     """,
     # Path description; tells user which directions are possible
     f"""
-    East leads back towords the woods.
+    EAST leads back towords the woods.
     Thick forestry envelops all other directions.
 
     """,
     None,
     # Calls the return_item function from the item script and adds it to the room inventory
-    item.return_item("shortsword"),
+    item.return_item("book"),
     # List of searchable areas 
     ["GREEN TREES", "ORANGE TREES", "RED TREES", "LAKE"],
     # Where the item can be found 
@@ -387,7 +387,7 @@ clearing = room.Room(
     # Calls the return_item function from the item script and adds it to the room inventory
     item.return_item("bow"),
     # List of searchable areas 
-    ["lean-to"],
+    ["LEAN-TO"],
     # Where the item can be found 
     None,
     # Links to other rooms
@@ -419,6 +419,7 @@ def set_item_locations_for_each_room():
         for item in room.inventory:
             item_location = room.choose_random_item_location(room.searchable_areas)
             room.item_location = item_location
+            room.has_been_visited = True
 
     return item_location
 
@@ -430,3 +431,5 @@ def generate_room_from_name(name):
     for room in all_rooms:
         if name == room.name:
             return room
+
+
