@@ -2,16 +2,22 @@ FINDABLE_ITEMS = {
     # dictionary entries for types of items which can be found in the game
     "weapons": {
         "broken sword": "Useless as a weapon, but the edge could hack a few branches!",
-        "shortsword": "Well balanced and swift, this blade will serve you well!",
+        "shortsword": "Well balanced, sharp, and swift, this blade will serve you well!",
         "mace": "A brutal weapon, but great for taking care of wild beasts",
         "bow": "Great for enemies at a distance!",
     },
     "keys": {
-        "cottage key": "key to the cottage",
-        "rusted key": "an old key, brittle and rough"
+        "cottage key": "Key to the cottage",
+        "rusted key": "An old key, brittle and rough"
     },
     "notes": {
-        "book": "A Teological examination of the Old Gods",
+        "book": f"""
+            Theobald Bantreck's Rules for Survival:
+
+        Always be prepared to meet a goblin by flowing water
+        They have been know for ransacking unsuspecting people. 
+        A sharp blade is usually more than enough to deal with them.
+        """,
     },
     "equipment": {
         "torch": "Already oiled, and with a striker to boot!",
