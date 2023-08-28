@@ -2,8 +2,9 @@ import random
 from time import sleep
 import sys
 import os
+from colorama import Fore
 
-class Room:
+class Room():
     """
     Creates an instance of the Room class.
     Rooms have inventories, item locations
@@ -39,17 +40,17 @@ class Room:
             os.system("stty -echo")
             for char in description:
                 sleep(0.02)
-                sys.stdout.write(char)
+                sys.stdout.write(Fore.WHITE + char)
                 sys.stdout.flush()
             # Turn on user inputs
             os.system("stty echo")
         else:
-            print(description)
+            print(Fore.WHITE + description)
 
     def describe_room(self):
         """Describes the instance of a room."""
 
-        print(self.name)
+        print(Fore.LIGHTRED_EX + self.name)
         # Call the type_descriptions method, passing this rooms description
         self.type_descritions(self.description)
         # Call the describe_event for this room 
@@ -59,7 +60,7 @@ class Room:
         """
         Describes the North, South, East and West paths from current room
         """
-        print(self.name)
+        print(Fore.LIGHTRED_EX + self.name)
         # Call the type_descriptions method, passing this room's path_description
         self.type_descritions(self.path_descriptions)
 
