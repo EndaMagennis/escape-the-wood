@@ -6,8 +6,6 @@ import sys
 from time import sleep
 from colorama import Fore
 
-# from colorama import Fore
-
 # The main logo in ascii
 logo ="""
     ______                         
@@ -62,14 +60,15 @@ def main():
     os.system("stty echo")
     # Setting item_locations
     map.set_item_locations_for_each_room()
-    # Calling the check_for_win_state function to initalize lists
+    # Initializing rooms and enemies lists
     game_environment.check_for_win_state()
     # Calling player.Player.name_player method
     player.current_player.name_player()
     # Describing current room
     player.current_player.current_room.describe_room()
-    # Running game
+    # Calling the check_for_win_state function to initalize lists
     player.current_player.register_user_inputs()
+    
 
 
 if __name__ == '__main__':
