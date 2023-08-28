@@ -8,16 +8,13 @@ FINDABLE_ITEMS = {
     },
     "keys": {
         "cottage key": "key to the cottage",
-        "golden key": "key with a golden hue",
         "rusted key": "an old key, brittle and rough"
     },
     "notes": {
-        "note": "I've found it, finally",
         "book": "A Teological examination of the Old Gods",
     },
     "equipment": {
         "torch": "Already oiled, and with a striker to boot!",
-        "rope": "50 feets worth, I reckon",
         "arrows": "A bundle of 10 arrows"
     }
 }
