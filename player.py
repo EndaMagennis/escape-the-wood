@@ -47,6 +47,8 @@ class Player():
         """ Records user inputs and calls the relevant methods """
         # Setting self.alive to true for a continuous loop
         self.alive = True
+        if game_environment.check_for_win_state() == True:
+            self.alive = False
         room = self.current_room
         # A list of possible actions
         actions = [
@@ -55,8 +57,6 @@ class Player():
         ]
         # Running a continuous loop
         while self.alive:
-            # if game_environment.check_for_win_state() == True:
-            #     self.alive = False
             print(f"You can do any of the following things:")
             print(Fore.BLUE)
             print(*actions, sep = ", ")
