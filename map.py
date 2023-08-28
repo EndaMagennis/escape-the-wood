@@ -419,7 +419,6 @@ def set_item_locations_for_each_room():
         for item in room.inventory:
             item_location = room.choose_random_item_location(room.searchable_areas)
             room.item_location = item_location
-            room.has_been_visited = True
 
     return item_location
 
