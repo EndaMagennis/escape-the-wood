@@ -101,7 +101,7 @@ village_path = room.Room(
     stitching itself through the trees. As you toil your way through
     you feel your legs ache. You can't say how long you've been walking.
     Finally, mercifully, you see before you a spire of a church.
-    You pasue and take a breather. You notice a deliberate formation of leaves.
+    You pause and take a breather. You notice a deliberate formation of leaves.
     There also seems to be a faint shimmer by an ODD TREE.
 
     """,
@@ -190,7 +190,7 @@ village = room.Room(
     Decay and time have had their way with this place.
     The wood frames have become blackened with mold.
     Mycelium and fungus intricately weave through every inch of
-    walls, the doors of each bungalow ling since turned to mush.
+    walls, the doors of each bungalow long since turned to mush.
     
     """,
     # Path description; tells user which directions are possible
@@ -309,7 +309,7 @@ dark_woods = room.Room(
     # Where the item can be found 
     None,
     # Links to other rooms
-    {"south": "The Clearing", "east": "The Village", "west": "The Woods"},
+    {"north":"The Dark Woods", "south": "The Clearing", "east": "The Village", "west": "The Woods"},
     # Items required to enter this room 
     "torch",
     # Defaulting to false for item found 
