@@ -47,8 +47,7 @@ class Player():
         """ Records user inputs and calls the relevant methods """
         # Setting self.alive to true for a continuous loop
         self.alive = True
-        if game_environment.check_for_win_state() == True:
-            self.alive = False
+        # Setting room 
         room = self.current_room
         # A list of possible actions
         actions = [
@@ -57,6 +56,8 @@ class Player():
         ]
         # Running a continuous loop
         while self.alive:
+            
+
             print(f"You can do any of the following things:")
             print(Fore.BLUE)
             print(*actions, sep = ", ")
@@ -239,7 +240,7 @@ class Player():
                         chosen_item = this_item
                         chosen_item = chosen_item.lower()
                         outcome = item.return_item_description(chosen_item)
-                        print(f"{Fore.MAGENTA + chosen_item.upper()}\n{Fore.WHITE + outcome.capitalize()}\n")
+                        print(f"{Fore.MAGENTA + chosen_item.upper()}\n{Fore.WHITE + outcome}\n")
                         sleep(2)
                     else:
                         continue
@@ -289,6 +290,7 @@ class Player():
                     if (current_room.name == "The Cottage" or current_room.name == "The Village") and chosen_item == current_room.required_item.upper():
                         sleep(2)
                         print(Fore.WHITE + "You hear a *click* as the key turns in the lock")
+                        current_room.has_event = False
                     print(Fore.WHITE)
                     # Set partial choice to full choice
                     return chosen_item
@@ -360,7 +362,8 @@ class Player():
                         sleep(2)
                         self.trigger_event()
 
-                    game_environment.check_for_win_state()
+                    if game_environment.check_for_win_state() == True:
+                        self.alive = False
 
                 else:
                     print(f"You cannot go that way... yet\n")
@@ -378,7 +381,14 @@ class Player():
         print(used_item)
         # Check for an encounter
         if room.has_encounter:
-            if used_item == required_item.upper():
+            if room.name == "The Dark Woods":
+                if used_item == "SHORTSWORD" or used_item == required_item.upper():
+                    print("...")
+                    sleep(2)
+                    print("You bested the beast!")
+                    room.has_encounter = False
+                    room.has_event = False
+            elif used_item == required_item.upper():
                 print("...")
                 sleep(2)
                 print("You bested the beast!")
