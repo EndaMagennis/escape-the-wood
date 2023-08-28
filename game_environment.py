@@ -76,6 +76,5 @@ def check_for_win_state():
         sleep(2)
         return True
     
-    return False
      
 
