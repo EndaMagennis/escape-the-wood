@@ -2,8 +2,9 @@ import map
 import game_environment
 import item
 from time import sleep
+from colorama import Fore
 
-class Player:
+class Player():
     """
     A class to instantiate a player object and hold
     information such as a current room, inventory,
@@ -50,13 +51,16 @@ class Player:
         # A list of possible actions
         actions = [
             "SEARCH", "MOVE", "CHECK", 
-            "LOOK", "USE", "DESCRIBE", "EXIT", 
+            "LOOK", "USE", "DESCRIBE", "EXIT", "HELP"
         ]
         # Running a continuous loop
         while self.alive:
-            print(f"You can do any of the following things:\n")
+            # if game_environment.check_for_win_state() == True:
+            #     self.alive = False
+            print(f"You can do any of the following things:")
+            print(Fore.BLUE)
             print(*actions, sep = ", ")
-            print()
+            print(Fore.WHITE)
 
             # Promting user for input
             user_action = input("What would you like to do?\n")
@@ -97,6 +101,11 @@ class Player:
                 print("Exiting")
                 # Ending the loop
                 self.alive = False
+
+            elif user_action in actions[7]:
+                # Calling the describe_room method
+                self.help()
+
             else:
                 print("That is not a valid choice. Try again.")
 
@@ -107,7 +116,7 @@ class Player:
         """
 
         # Prompting user to give a name
-        player_name = input("Enter your name:\n").capitalize()
+        player_name = input(Fore.WHITE + "Enter your name:\n").capitalize()
         # Calling the validate_input method to validate player_name
         if self.validate_input(
             player_name, 
@@ -119,8 +128,12 @@ class Player:
         else:
         # If the input is valid
             self.name = player_name
-            print(f"Hello, {player_name}. Your journey begins in: ")
+            print(f"Hello, {player_name}. Your journey begins in:\n")
             return player_name
+
+    def help(self):
+        for x in game_environment.ACTION_DESCRIPTIONS.keys():
+            print(f"{Fore.BLUE + x}: {Fore.WHITE + game_environment.ACTION_DESCRIPTIONS[x]}")
 
     def search(self, room):
         """ Prompts user to search areas based on current room."""
@@ -129,18 +142,20 @@ class Player:
 
         # Set room variable to current room
         room = self.current_room
+
         # Set possible areas to this room's searchable areas
         possible_areas = room.searchable_areas
+
         # set the item_location
         item_location = room.item_location
 
         # Give the user the list of searchable areas
         print("These seem like worthy locations:\n")
         for area in possible_areas:
-            print(area)
+            print(Fore.GREEN + area)
 
         # Prompt user to choose from the list    
-        player_choice = input("Where would you like to search?:\n")
+        player_choice = input(Fore.WHITE + "Where would you like to search?:\n")
 
         # Validate user input
         if self.validate_input(
@@ -153,19 +168,36 @@ class Player:
         # If valid set to uppercase to match against searchable areas
         player_choice = player_choice.upper()
 
-        outcome = game_environment.check_for_partial_match(player_choice, possible_areas, area, f"Surely you know {player_choice} isn't a choice?")
+        # Set variable to returned value of check for partial match function
+        outcome = game_environment.check_for_partial_match(
+            player_choice, 
+            possible_areas, 
+            area, 
+            f"Surely you know {player_choice} isn't a choice?"
+            )
+        
+        # Check if outcome is in possible areas
         if outcome in possible_areas:
+            # Set player choice to the full string
             player_choice = outcome
-            print(f"You search the {player_choice}")
+            # Give user feedback
+            print(f"You search the {Fore.GREEN + player_choice}")
+            # Change back to white color
+            print(Fore.WHITE)
             sleep(2)
-            if player_choice == item_location and room.item_found == False:
+
+            # Check if user has found the item and making sure item has not been foun already
+            if player_choice == item_location and room.item_found == False and not room.has_event:
+                # Setting the item_found to True for this room
                 room.item_found = True
                 # Give user feedback
-                print(f"You found the {room.inventory.upper()}")
+                print(f"You found the {Fore.MAGENTA + room.inventory.upper()}")
                 sleep(2)
-                # Call the pick_up_item method
-                # Set room.item_found to True
+                # Call the pick_up_item method and setting the inventory to uppercase
                 self.pick_up_item(room.inventory.upper())
+            # Checking if room has event
+            elif room.has_event:
+                print("You cannot open it. Come back and try again.")
             else:
                 print(f"You found nothing")
                 sleep(2)
@@ -175,8 +207,11 @@ class Player:
     def check_inventory(self):
         # First clears the terminal
         game_environment.clear_terminal()
-
-        print(f"You are currently holding:\n {self.inventory}\n")
+        # Prints inventory in magenta and resets to white
+        print("You are currently holding: ")
+        print(Fore.MAGENTA)
+        print(*self.inventory, sep= ",  ")
+        print(Fore.WHITE)
 
     def look(self, inventory):
         """A method which prints the chosen item description if player has item in inventory"""
@@ -186,9 +221,10 @@ class Player:
         if len(inventory) > 0:
             # Print the inventory
             print("What would you like to look at?\n")
+            print(Fore.MAGENTA)
             print(*inventory, sep= ", ")
             # Prompt user to choose an item
-            chosen_item = input("\n")
+            chosen_item = input(Fore.WHITE + "\n")
             # Validate user input
             if self.validate_input(
                 chosen_item,
@@ -203,12 +239,12 @@ class Player:
                         chosen_item = this_item
                         chosen_item = chosen_item.lower()
                         outcome = item.return_item_description(chosen_item)
-                        print(f"{chosen_item.upper()}\n{outcome.capitalize()}")
+                        print(f"{Fore.MAGENTA + chosen_item.upper()}\n{Fore.WHITE + outcome.capitalize()}\n")
                         sleep(2)
                     else:
                         continue
                 if chosen_item.upper() not in inventory:
-                    print("WahWah")
+                    print("Haven't got that.")
         else:
             print("You haven't got anything")
 
@@ -219,10 +255,10 @@ class Player:
         """
         # First clears the terminal
         game_environment.clear_terminal()
-
         # append a dictionary entry to the player's inventory
-        print(f"You have picked up the {new_item}\n")
+        print(f"You have picked up the {Fore.MAGENTA + new_item}\n")
         self.inventory.append(new_item)
+        print(Fore.WHITE)
 
     def use_item(self, inventory):
         """
@@ -230,8 +266,12 @@ class Player:
         If it exists, it will return the item.
         """
         if len(inventory) > 0:
-            print("You're currently holding:\n")
+
+            current_room = self.current_room
+            print("You're currently holding:")
+            print(Fore.MAGENTA)
             print(*inventory, sep= ", ")
+            print(Fore.WHITE)
             chosen_item = input("What would you like to use?:\n")
             # Validating user input
             if self.validate_input(
@@ -240,21 +280,26 @@ class Player:
                 f"I need more that {len(chosen_item)} to work with. Give me at least 3 letters",
                 ) == False:
                 return
-            else:
-                # If valid
-                chosen_item = chosen_item.upper()
-                for x in self.inventory:
-                    continue
+            # If valid
+            chosen_item = chosen_item.upper()
+            for x in self.inventory:
                 if chosen_item in x:
-                    print(f"You use the {x}")
-                    # Set partial choice to full choice
                     chosen_item = x
+                    print(f"You use the {Fore.MAGENTA + x}")
+                    if (current_room.name == "The Cottage" or current_room.name == "The Village") and chosen_item == current_room.required_item.upper():
+                        sleep(2)
+                        print(Fore.WHITE + "You hear a *click* as the key turns in the lock")
+                    print(Fore.WHITE)
+                    # Set partial choice to full choice
                     return chosen_item
                 elif chosen_item == "EXIT":
                     return
                 else:
-                    print("That's not in your inventory\n")
-                    self.use_item(self.inventory)
+                    continue
+            if chosen_item not in self.inventory:
+                print("You haven't got that. Try again.")
+                self.use_item(self.inventory)
+                
         else:
             print("You haven't got anything to use.\n")
 
@@ -274,7 +319,7 @@ class Player:
             "Sorry, that is not a valid direction\n"
             ) == False:
             # Repeating method until valid input is given
-            self.move_to_room(self.current_room)
+            return
 
         direction = direction.lower()
         if direction == "exit":
@@ -297,7 +342,7 @@ class Player:
                     # Setting the player's current room to the new_room
                     self.current_room = new_room
                     # Describing the new room to the user
-                    print(f"You have chosen to go {direction.upper()}...")
+                    print(f"You have chosen to go {Fore.CYAN + direction.upper()}...")
                     sleep(3)
                     # Clearing the terminal
                     game_environment.clear_terminal()
@@ -313,7 +358,10 @@ class Player:
                     
                     if new_room.has_event:
                         sleep(2)
-                        self.trigger_event(new_room, new_room.required_item)
+                        self.trigger_event()
+
+                    game_environment.check_for_win_state()
+
                 else:
                     print(f"You cannot go that way... yet\n")
                     return
@@ -323,16 +371,14 @@ class Player:
             print(f"You and I both know that {direction} is not a direction")
             sleep(2)
 
-    def trigger_event(self, room, required_item):
+    def trigger_event(self):
         room = self.current_room
         required_item = room.required_item
         used_item = self.use_item(self.inventory)
-        used_item = used_item.lower()
         print(used_item)
-        print(required_item)
         # Check for an encounter
         if room.has_encounter:
-            if used_item == required_item:
+            if used_item == required_item.upper():
                 print("...")
                 sleep(2)
                 print("You bested the beast!")
@@ -344,7 +390,7 @@ class Player:
                 print("You Died. Game Over\n")
                 self.alive = False
         else:
-            if used_item == required_item:
+            if used_item == required_item.upper():
                 print("...")
                 sleep(2)
                 print("You did it\n")
@@ -354,6 +400,6 @@ class Player:
                 print("...")
                 sleep(2)
                 print("It did not work\n")
-                self.trigger_event(room, required_item)
         
-       
+# Instantiating the player with no name, with no inventory, in the Cottage
+current_player = Player("", [], map.generate_room_from_name("The Cottage"))
