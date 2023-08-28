@@ -4,6 +4,9 @@ import game_environment
 import os
 import sys
 from time import sleep
+from colorama import Fore
+
+# from colorama import Fore
 
 # The main logo in ascii
 logo ="""
@@ -40,16 +43,12 @@ intro = f"""
     You suddenely remember yourself.
     """
 
-# Instantiating the player with no name, with no inventory, in the Cottage
-current_player = player.Player("", [], map.generate_room_from_name("The Cottage"))
-
 
 def main():
-        
     # Turning off user inputs
     os.system("stty -echo")
     # Printing logo
-    print(logo)
+    print(Fore.CYAN + logo)
     # Waiting 2 seconds
     sleep(2)
     # Clearing the terminal
@@ -57,18 +56,21 @@ def main():
     # Typing the intro
     for char in intro:
         sleep(0.02)
-        sys.stdout.write(char)
+        sys.stdout.write(Fore.GREEN + char)
         sys.stdout.flush()
-    # Turning  on user inputs
+    # Turning on user inputs
     os.system("stty echo")
     # Setting item_locations
     map.set_item_locations_for_each_room()
+    # Calling the check_for_win_state function to initalize lists
+    game_environment.check_for_win_state()
     # Calling player.Player.name_player method
-    current_player.name_player()
+    player.current_player.name_player()
     # Describing current room
-    current_player.current_room.describe_room()
+    player.current_player.current_room.describe_room()
     # Running game
-    current_player.register_user_inputs()
+    player.current_player.register_user_inputs()
 
 
-main()
+if __name__ == '__main__':
+    main()
