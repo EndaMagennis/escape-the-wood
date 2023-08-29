@@ -1,32 +1,42 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Escape The Woods
 
-Welcome,
+![Banner Image](documentation/documentation-banner-image.png)
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+Link to [Deployed App](https://escape-the-wood-d0f5272a8865.herokuapp.com/)
 
-## Reminders
+## Background to Escape the Woods
+Escape the Woods is a [Python](https://www.python.org/) terminal application which is an homage to old-school, text-based adventure games.
+Text-based adventure games like [Zork](https://en.wikipedia.org/wiki/Zork) were among the first interactive media accessible on computers. Given that they only require user input, they lend themselves perfectly to input validation.
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+## How to Play
 
-## Creating the Heroku app
+1. Click [here](https://escape-the-wood-d0f5272a8865.herokuapp.com/) to access the app
+2. The app will begin automatically.
+3. Read the introduction carefully 
+4. Input your name
+5. Read the description and input at least 3 letters of your chosen action
+6. Visit areas, collect items, read descriptions and survive
+7. Know that some areas require items to progress
+8. To 'win' you must visit all rooms and defeat both enemies
+9. Encounters with enemies require specific items(weapons)
+10. Engaging in an encounter without a weapon will end in defeat
+11. Restart the game
+12. Become frustrated, like the good old days
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+You can find a guide below on exact steps to take to win
 
-1. `heroku/python`
-2. `heroku/nodejs`
+---
+## User Stories
+### First-time Users
+ - As a first-time user, I want to understand how to interact with the app
+ - As a first-time user, I want clear objectives
+ - As a firt-time user, I want the app to anticipate my inputs and work regardless of what I type
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+ ### Returning Users
+ - As a returning user, I want to be able to finish the game in an efficient way
+ - As a returning user, I want to be able to take different routes
 
 ---
 
-Happy coding!
+ ## Features
+ 
