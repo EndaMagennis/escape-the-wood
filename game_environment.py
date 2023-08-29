@@ -42,12 +42,12 @@ INTRO = f"""
     """
 
 ACTION_DESCRIPTIONS = {
-    "SEARCH": "Gives you a selection of places to search for items",
-    "MOVE": "Describes the paths you may take",
-    "LOOK": "Give you a descrption of a chosen item in your inventory",
-    "USE": "Uses an item in your inventory",
-    "DESCRIBE": "Describes the current room",
-    "END GAME": "Quits the game",
+    "SEARCH('SE')": "Gives you a selection of places to search for items",
+    "MOVE('MO')": "Describes the paths you may take",
+    "LOOK('LO')": "Give you a descrption of a chosen item in your inventory",
+    "USE('US')": "Uses an item in your inventory",
+    "DESCRIBE('DE')": "Describes the current room",
+    "END GAME('EN')": "Quits the game",
 }
 
 
@@ -129,21 +129,21 @@ def initialize_game():
     Resets the player object and room objects.
     Runs the main logic for the game.
     """
-    # Turning off user inputs
-    os.system("stty -echo")
-    # Printing logo
-    print(Fore.CYAN + LOGO)
-    # Waiting 2 seconds
-    sleep(2)
-    # Clearing the terminal
-    clear_terminal()
-    # Typing the intro
-    for char in INTRO:
-        sleep(0.02)
-        sys.stdout.write(Fore.GREEN + char)
-        sys.stdout.flush()
-    # Turning on user inputs
-    os.system("stty echo")
+    # # Turning off user inputs
+    # os.system("stty -echo")
+    # # Printing logo
+    # print(Fore.CYAN + LOGO)
+    # # Waiting 2 seconds
+    # sleep(2)
+    # # Clearing the terminal
+    # clear_terminal()
+    # # Typing the intro
+    # for char in INTRO:
+    #     sleep(0.02)
+    #     sys.stdout.write(Fore.GREEN + char)
+    #     sys.stdout.flush()
+    # # Turning on user inputs
+    # os.system("stty echo")
     # Initializing all rooms
     map.initialize_all_rooms()
     # Setting item_locations
