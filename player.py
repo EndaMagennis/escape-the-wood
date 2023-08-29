@@ -38,7 +38,7 @@ class Player():
                 raise ValueError
             else:
                 for char in input:
-                    if char.isspace():
+                    if char.isspace() and not input.isspace():
                         continue
                     elif not char.isalnum():
                         raise TypeError
