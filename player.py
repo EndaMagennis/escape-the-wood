@@ -31,18 +31,17 @@ class Player():
                 game_environment.clear_terminal()
                 return
             # Check that only numbers and letter and spaces are used
-            elif not input.isalnum():
-                for char in input:
-                    # Check that first letter is not a space
-                    if (not input[0].isspace() and
-                            char.isspace() or char.isalnum()):
-                        return True
-                    else:
-                        raise TypeError
+            elif not bool(input):
+                raise ValueError
             # Control the length of the input
             elif len(input) < 2 or len(input) > 22:
                 raise ValueError
             else:
+                for char in input:
+                    if char.isspace():
+                        continue
+                    elif not char.isalnum():
+                        raise TypeError
                 return True
 
         except TypeError:
@@ -65,7 +64,7 @@ class Player():
         # Calling the validate_input method to validate player_name
         if self.validate_input(
             player_name,
-            "Name cannot start with a space and must be alphanumerical",
+            "Name cannot contain spaces and must be alphanumerical",
             "Please give a name name between 2 to 22 letters in length"
                 ) is False:
             # Repeating the name_player method until a valid input is given.
@@ -154,6 +153,7 @@ Are you sure you want to leave the game?: (Y/N)\n
             return
 
     def help(self):
+        game_environment.clear_terminal()
         for x in game_environment.ACTION_DESCRIPTIONS.keys():
             print(f"""
 {Fore.BLUE + x}: {Fore.WHITE + game_environment.ACTION_DESCRIPTIONS[x]}
