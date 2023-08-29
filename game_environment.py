@@ -26,7 +26,10 @@ def clear_terminal():
         command = system('clear')
 
 def check_for_partial_match(input, this_list, list_item, negative_statement):
-
+    """
+    Iterates through a list and checks if the 
+    input value is a partial match for an item in the list
+    """
     for list_item in this_list:
         if input in list_item:
             return list_item

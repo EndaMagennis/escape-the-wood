@@ -28,7 +28,7 @@ class Player():
             if input == "exit" or input == "EXIT":
                 return
             # Check that only numbers and letter and spaces are used
-            if not input.isalnum() and not input.isspace():
+            if not input.isalnum() and input.isspace():
                 raise TypeError
             # Control the length of the input
             elif len(input) < 2 or len(input) > 22:
