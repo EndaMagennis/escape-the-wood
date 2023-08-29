@@ -1,5 +1,6 @@
 from time import sleep
 from colorama import Fore
+import re
 import map
 import game_environment
 import item
@@ -30,11 +31,19 @@ class Player():
                 game_environment.clear_terminal()
                 return
             # Check that only numbers and letter and spaces are used
-            if not input.isalnum():
-                raise TypeError
+            elif not input.isalnum():
+                for char in input:
+                    # Check that first letter is not a space
+                    if (not input[0].isspace() and
+                            char.isspace() or char.isalnum()):
+                        return True
+                    else:
+                        raise TypeError
             # Control the length of the input
             elif len(input) < 2 or len(input) > 22:
                 raise ValueError
+            else:
+                return True
 
         except TypeError:
             print(Fore.RED + type_err_message)
@@ -43,7 +52,30 @@ class Player():
         except ValueError:
             print(Fore.RED + val_err_message)
             return False
-        return True
+
+    def name_player(self):
+        """
+        Prompts user to give player a name.
+        Validates user input and sets player name if valid.
+        """
+
+        # Prompting user to give a name
+        player_name = input(Fore.WHITE + "Enter your name:\n")
+
+        # Calling the validate_input method to validate player_name
+        if self.validate_input(
+            player_name,
+            "Name cannot start with a space and must be alphanumerical",
+            "Please give a name name between 2 to 22 letters in length"
+                ) is False:
+            # Repeating the name_player method until a valid input is given.
+            self.name_player()
+        else:
+            # If the input is valid
+            self.name = player_name
+            # Remove extra spaces
+            player_name = re.sub(' +', ' ', player_name)
+            print(f"Hello, {player_name.title()}. Your journey begins in:\n")
 
     def register_user_inputs(self):
         """ Records user inputs and calls the relevant methods """
@@ -62,17 +94,17 @@ class Player():
             print(Fore.WHITE + f"You can do any of the following things:")
             print(Fore.BLUE)
             print(*ACTIONS, sep=", ")
-            print(Fore.WHITE)
 
             # Promting user for input
-            user_action = input("What would you like to do?\n")
+            user_action = input(Fore.WHITE + f"""
+What would you like to do?\n""")
             # Validatong user input
             if self.validate_input(
                 user_action,
                 f"""
-        Not quite sure what you mean by '{user_action}', use your words!\n""",
+Not quite sure what you mean by '{user_action}', use your words!\n""",
                 f"""
-        Please give, at least, 2 letters for what you want.\n""") is False:
+Please give, at least, 2 letters for what you want.\n""") is False:
                 continue
             # Removing case sensitivity and checking for valid actions
             user_action = user_action.upper()
@@ -99,7 +131,7 @@ class Player():
 
             elif user_action in ACTIONS[5]:
                 clarify = input(Fore.RED + f"""
-            Are you sure you want to leave the game?: (Y/N)\n
+Are you sure you want to leave the game?: (Y/N)\n
             """)
                 if clarify == "y" or clarify == "Y":
                     # Ending the loop
@@ -112,43 +144,20 @@ class Player():
                     self.register_user_inputs()
                 else:
                     print(Fore.RED + "That is not a choice! Try again")
-                    user_action == ACTIONS[5]
-
             elif user_action in ACTIONS[6]:
                 # Calling the describe_room method
                 self.help()
             else:
+                print(Fore.RED + "That's not an option. Try again!")
                 self.register_user_inputs()
         if self.alive is False:
             return
 
-    def name_player(self):
-        """
-        Prompts user to give player a name.
-        Validates user input and sets player name if valid.
-        """
-
-        # Prompting user to give a name
-        player_name = input(Fore.WHITE + "Enter your name:\n").capitalize()
-        # Calling the validate_input method to validate player_name
-        if self.validate_input(
-            player_name,
-            "Please give a name consisting only of numbers or letters",
-            "Please give a name name between 2 to 22 letters in length"
-                ) is False:
-            # Repeating the name_player method until a valid input is given.
-            self.name_player()
-        else:
-            # If the input is valid
-            self.name = player_name
-            print(f"Hello, {player_name}. Your journey begins in:\n")
-            return player_name
-
     def help(self):
         for x in game_environment.ACTION_DESCRIPTIONS.keys():
             print(f"""
-    {Fore.BLUE + x}: {Fore.WHITE + game_environment.ACTION_DESCRIPTIONS[x]}
-    """)
+{Fore.BLUE + x}: {Fore.WHITE + game_environment.ACTION_DESCRIPTIONS[x]}
+""")
 
     def search(self, room):
         """ Prompts user to search areas based on current room."""
@@ -170,7 +179,7 @@ class Player():
             print(Fore.GREEN + area)
         print(Fore.LIGHTBLUE_EX + f"""
 
-        You can type 'EXIT' or 'exit' to cancel action
+You can type 'EXIT' or 'exit' to cancel action
         """)
 
         # Prompt user to choose from the list
@@ -181,10 +190,10 @@ class Player():
         if self.validate_input(
             player_choice,
             f"""
-    It's not possible to serach for '{player_choice}'. Try using letters.
+It's not possible to serach for '{player_choice}'. Try using letters.
             """,
             f"""
-    I need at least 2 letters to understand where you're looking.
+I need at least 2 letters to understand where you're looking.
             """
                 ) is False:
             return
@@ -243,7 +252,7 @@ class Player():
             print(Fore.MAGENTA)
             print(*inventory, sep=", ")
             print(Fore.LIGHTBLUE_EX + f"""
-    \nYou can type 'EXIT' or 'exit' to cancel action
+\nYou can type 'EXIT' or 'exit' to cancel action
             """)
 
             # Prompt user to choose an item
@@ -297,7 +306,7 @@ class Player():
             print(Fore.MAGENTA)
             print(*inventory, sep=", ")
             print(Fore.LIGHTBLUE_EX + f"""
-    \nYou can type 'EXIT' or 'exit' to cancel action""")
+\nYou can type 'EXIT' or 'exit' to cancel action""")
             print(Fore.WHITE)
 
             chosen_item = input("What would you like to use?:\n")
@@ -305,12 +314,12 @@ class Player():
             if self.validate_input(
                 chosen_item,
                 f"""
-    It's hard to carry a '{chosen_item}', try something real!
-    """,
+It's hard to carry a '{chosen_item}', try something real!
+""",
                 f"""
-    I need more than '{len(chosen_item)}' to work with.
-    Give me at least 3 letters
-    """,
+I need more than '{len(chosen_item)}' to work with.
+Give me at least 3 letters
+""",
                     ) is False:
                 return
             # If valid
@@ -325,8 +334,8 @@ class Player():
                                 current_room.required_item.upper())):
                         sleep(2)
                         print(Fore.GREEN + f"""
-    You hear a *click* as the key turns in the lock
-    """)
+You hear a *click* as the key turns in the lock
+""")
                     current_room.has_event = False
                     print(Fore.WHITE)
                     # Set partial choice to full choice
@@ -341,7 +350,8 @@ class Player():
                 self.use_item(self.inventory)
 
         else:
-            print("You haven't got anything to use.\n")
+            print(Fore.RED + f"""
+You haven't got anything to use.\n""")
 
     def move_to_room(self, current_room):
         # First clears the terminal
@@ -352,8 +362,8 @@ class Player():
         current_room.describe_paths()
         # Prompting the user for directional input
         print(Fore.LIGHTBLUE_EX + f"""
-    \nYou can type 'EXIT' or 'exit' to cancel action
-    """)
+\nYou can type 'EXIT' or 'exit' to cancel action
+""")
         direction = input(Fore.WHITE + f"Which direction?\n")
         # Validatiing user input
         if self.validate_input(
@@ -388,8 +398,8 @@ class Player():
                     self.current_room = new_room
                     # Describing the new room to the user
                     print(f"""
-    You have chosen to go {Fore.CYAN + direction.upper()}...
-    """)
+You have chosen to go {Fore.CYAN + direction.upper()}...
+""")
                     sleep(2)
                     # Clearing the terminal
                     game_environment.clear_terminal()
