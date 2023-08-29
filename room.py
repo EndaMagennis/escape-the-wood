@@ -4,6 +4,7 @@ import sys
 import os
 from colorama import Fore
 
+
 class Room():
     """
     Creates an instance of the Room class.
@@ -11,9 +12,12 @@ class Room():
     and paths to other rooms
     """
     def __init__(
-                self, name, description, path_descriptions, event_description, inventory,
-                searchable_areas, item_location, linked_rooms, required_item, 
-                item_found, has_been_visited, has_event, has_encounter
+                self, name, description, path_descriptions,
+                event_description, inventory,
+                searchable_areas, item_location,
+                linked_rooms, required_item,
+                item_found, has_been_visited,
+                has_event, has_encounter
                 ):
         self.name = name
         self.description = description
@@ -31,7 +35,7 @@ class Room():
 
     def type_descritions(self, description):
         """
-        Method gives a typed effect to the desription when 
+        Method gives a typed effect to the desription when
         the user first visits the room.
         On subsequent visits, the desriction is simply printed.
         """
@@ -53,7 +57,7 @@ class Room():
         print(Fore.LIGHTRED_EX + self.name)
         # Call the type_descriptions method, passing this rooms description
         self.type_descritions(self.description)
-        # Call the describe_event for this room 
+        # Call the describe_event for this room
         self.describe_event()
 
     def describe_paths(self):
@@ -61,7 +65,7 @@ class Room():
         Describes the North, South, East and West paths from current room
         """
         print(Fore.LIGHTRED_EX + self.name)
-        # Call the type_descriptions method, passing this room's path_description
+        # Call the type_descriptions method
         self.type_descritions(self.path_descriptions)
 
     def describe_event(self):
