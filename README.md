@@ -40,3 +40,81 @@ You can find a guide below on exact steps to take to win
 
  ## Features
  
+- ASCII logo during the intro
+
+[Ascii Art](https://en.wikipedia.org/wiki/ASCII_art) uses strings of characters and special characters to create images and can be printed to consoles relatively easily.
+
+![Ascii logo](documentation/documentation-ascii-logo.png)
+
+- Introduction
+
+The introduction gives the user the goal of the game and incentivises paying careful attention to the descriptions of places and items. It also forewarns the player that they should be wary of encounters if they do not have the correct gear.
+
+![Introduction](documentation/documentation-introduction.png)
+
+- Prompt to enter a name and first room description
+
+As seen above, after the introduction, the user is then prompted to enter a name, the input is validated and a welcome message is printed. The user is then itroduced to the world, in the first room.
+
+![Welcome and first room](documentation/documentation-welcome-message.png)
+
+- Colors
+
+Using the [colorama library](https://pypi.org/project/colorama/), color is added to certain texts. This is to create a better user experience and highlight key actions the user can take
+
+![Colors](documentation/documentation-colors.png)
+
+- Action functions
+
+Throuout the game, the user is promted to input an action verb to trigger an action; "search", "move", "look", "use", "describe", "end game", and "help" all correspond to an in-game method. How the inputs are checked allows users to input only a partial string, e.g., "he" to run the help method.
+
+![Help method](documentation/documentation-help.png)
+
+---
+## Flowcharts
+
+The logic of the game is a loop. While the player is "alive" they are continually prompted to input actions until certain game conditions are met.
+
+- Initial chart with no encouter system
+
+![Initial flowchart](documentation/documentation-first-flowchart.png)
+
+- Flowchart with encounter system
+
+![Flowchart with encounters](documentation/documentation-encounter-flowchart.png)
+
+---
+
+## Technologies
+
+### Languages
+
+- [Python 3.11.3](https://www.python.org/downloads/release/python-3113/): Used as the foundation for logic of the app (80.2%)
+
+- [HTML](https://www.w3schools.com/html/html_intro.asp): Part of the CI Template, used to format the host webpage
+
+- [Javascript](https://www.w3schools.com/js/): Also part of the CI template, used for webpage logic
+
+### Libraries and Tools
+#### Native Python Library Imports
+
+- [random](https://docs.python.org/3/library/random.html): used to randomise item locations in rooms
+
+- [time](https://docs.python.org/3/library/time.html): used to import the [sleep](https://docs.python.org/3/library/time.html#time.sleep) method to wait x number of seconds at certain points
+
+- [sys](https://docs.python.org/3/library/sys.html): used to create a typing effect using the [sys.stdout](https://docs.python.org/3/library/sys.html#sys.stdout).write() method in conjunction with the sleep method above, and the sys.stdout.flush() method to clear the stdout buffer.
+
+- [os](https://docs.python.org/3/library/os.html): used [os.system](https://docs.python.org/3/library/os.html#os.system) to prevent user input during typing effect, and used [os.name](https://docs.python.org/3/library/os.html#os.name) to clear the terminal regardless of current operating system.
+
+#### Third Party Imports
+
+- [colorama](https://pypi.org/project/colorama/): used to import Fore to change the color of terminal output.
+
+---
+
+## Bugs and Fixes
+
++ *Input Validation*
+
+
+
