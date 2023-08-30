@@ -321,13 +321,15 @@ I need more than '{len(chosen_item)}' to work with.
 Give me at least 3 letters
 """,
                     ) is False:
-                return
+                # Repeating method and returning th output
+                return self.use_item(self.inventory)
             # If valid
             chosen_item = chosen_item.upper()
             for x in self.inventory:
+                # Check for partial string
                 if chosen_item in x:
+                    # Set to full string
                     chosen_item = x
-                    print(f"You use the {Fore.MAGENTA + x}")
                     if ((current_room.name == "The Cottage"
                         or current_room.name == "The Village") and
                             (chosen_item ==
@@ -335,10 +337,12 @@ Give me at least 3 letters
                         sleep(2)
                         print(Fore.GREEN + f"""
 You hear a *click* as the key turns in the lock
-""")
-                    current_room.has_event = False
+""")                    # Set event to false
+                        current_room.has_event = False
+                    # User feedback
+                    print(f"You use the {Fore.MAGENTA + x}")
                     print(Fore.WHITE)
-                    # Set partial choice to full choice
+                    # Return item
                     return chosen_item
                 elif chosen_item == "EXIT":
                     game_environment.clear_terminal()
@@ -346,10 +350,10 @@ You hear a *click* as the key turns in the lock
                 else:
                     continue
             if chosen_item not in self.inventory:
-                print("You haven't got that. Try again.")
-                self.use_item(self.inventory)
-
+                print("You haven't got that.")
+                return self.use_item(self.inventory)
         else:
+            # If inventory is empty
             print(Fore.RED + f"""
 You haven't got anything to use.\n""")
 
@@ -433,8 +437,9 @@ You have chosen to go {Fore.CYAN + direction.upper()}...
     def trigger_event(self):
         room = self.current_room
         required_item = room.required_item
+        # Getting returned item from use_item method
         used_item = self.use_item(self.inventory)
-        print(used_item)
+
         # Check for an encounter
         if room.has_encounter:
             if room.name == "The Dark Woods":
@@ -446,25 +451,31 @@ You have chosen to go {Fore.CYAN + direction.upper()}...
                     print("You bested the beast!")
                     room.has_encounter = False
                     room.has_event = False
+                else:
+                    print("...")
+                    sleep(2)
+                    print(Fore.RED + "You Died. Game Over\n")
+                    self.alive = False
+
             elif used_item == required_item.upper():
                 print("...")
                 sleep(2)
-                print("You bested the beast!")
+                print(Fore.GREEN + "You bested the beast!")
                 room.has_encounter = False
                 room.has_event = False
             else:
                 print("...")
                 sleep(2)
-                print("You Died. Game Over\n")
+                print(Fore.RED + "You Died. Game Over\n")
                 self.alive = False
         else:
             if used_item == required_item.upper():
                 print("...")
                 sleep(2)
-                print("You did it\n")
+                print(Fore.GREEN + "You did it\n")
                 room.has_encounter = False
                 room.has_event = False
             else:
                 print("...")
                 sleep(2)
-                print("It did not work\n")
+                print(Fore.RED + "It did not work\n")
