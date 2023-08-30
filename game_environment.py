@@ -108,9 +108,6 @@ def check_for_win_state():
             if room in enemies_remaining:
                 enemies_remaining.remove(room)
 
-    print(f"Enemies remaining: {len(enemies_remaining)}")
-    print(f"Rooms remaining: {len(rooms_remaining)}")
-
     # Check if both lists are empty
     if len(rooms_remaining) == 0 and len(enemies_remaining) == 0:
         sleep(3)
