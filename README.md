@@ -110,11 +110,48 @@ The logic of the game is a loop. While the player is "alive" they are continuall
 
 - [colorama](https://pypi.org/project/colorama/): used to import Fore to change the color of terminal output.
 
----
+#### Other Tools:
+
+- [VSCode](https://code.visualstudio.com/) IDE and code editor used to write code
+- [Git](https://git-scm.com/) was used for version control
+- [GitHub](https://github.com/) was used to store the code to a cloud repository
+- [GIMP](https://www.gimp.org/) was used to trim and alter PNGs used in documentation
+- [Heroku](https://signup.heroku.com/) was used to deploy the terminal app online
+
+--- 
 
 ## Bugs and Fixes
 
-+ *Input Validation*
-
++ Input Validation:
+    - Player could input special characters
+        - Fix: 
+        ```python
+        for char in input:
+                ...
+                elif not char.isalnum():
+                    raise TypeError
+            return True
+        ```
+    - Player could leave blank input
+        - Fix:
+        ```python
+        elif not bool(input):
+            raise ValueError
+        ```
+    - Player could not use spaces
+        - Fix:
+        ```python
+        else:
+            for char in input:
+                if char.isspace() and not input.isspace():
+                    continue
+        ```
+    - Name containing spaces would not capitalize after space
+        - Fix:
+        ```python
+        else:
+        ...
+        print(f"Hello, {player_name.title()}. Your journey begins in:\n")
+        ```
 
 
