@@ -62,7 +62,8 @@ class Room():
 
     def describe_paths(self):
         """
-        Describes the North, South, East and West paths from current room
+        Describes the North, South, 
+        East and West paths from current room
         """
         print(Fore.LIGHTRED_EX + self.name)
         # Call the type_descriptions method

@@ -41,9 +41,8 @@ A bundle of 10 arrows"""
 
 
 def return_item(request):
-    """
-    A function to return an item from the FINDABLE_ITEMS dictionary
-    """
+    """A function to return an item from the FINDABLE_ITEMS dictionary"""
+
     for out_key, out_value in FINDABLE_ITEMS.items():
         for in_key, in_value in out_value.items():
             if request == in_key:
@@ -51,8 +50,8 @@ def return_item(request):
 
 
 def return_item_description(request):
-
     """A funtion to return an item descrition"""
+    
     for out_key, out_value in FINDABLE_ITEMS.items():
         for in_key, in_value in out_value.items():
             if request == in_key:

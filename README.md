@@ -319,8 +319,9 @@ The logic of the game is a loop. While the player is "alive" they are continuall
         ```
 
     1. The while loop from the previous game was still active
+    ---
     ![Double call restart game](documentation/bugs/bug-restart.png)
-
+    ---
     ![Bug Restart Loop](documentation/bugs/bug-end-game.png)
 
     - **Fix:** Previously, when the player.alive was set to False, the player.register_inputs() method would call game_environment.restart_game(). Now, the metod simply returns, ending the loop, and the restart_game() function is called last in the initialize_game() function.
