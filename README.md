@@ -46,29 +46,61 @@ You can find a guide below on exact steps to take to win
 
 ![Ascii logo](documentation/documentation-ascii-logo.png)
 
-- Introduction
+- **Introduction**
 
-The introduction gives the user the goal of the game and incentivises paying careful attention to the descriptions of places and items. It also forewarns the player that they should be wary of encounters if they do not have the correct gear.
+    The introduction gives the user the goal of the game and incentivises paying careful attention to the descriptions of places and items. It also forewarns the player that they should be wary of encounters if they do not have the correct gear.
 
 ![Introduction](documentation/documentation-introduction.png)
 
-- Prompt to enter a name and first room description
+- **Prompt to enter a name and first room description**
 
-As seen above, after the introduction, the user is then prompted to enter a name, the input is validated and a welcome message is printed. The user is then itroduced to the world, in the first room.
+    As seen above, after the introduction, the user is then prompted to enter a name, the input is validated and a welcome message is printed. The user is then itroduced to the world, in the first room.
 
 ![Welcome and first room](documentation/documentation-welcome-message.png)
 
-- Colors
+- **Colors**
 
-Using the [colorama library](https://pypi.org/project/colorama/), color is added to certain texts. This is to create a better user experience and highlight key actions the user can take
+    Using the [colorama library](https://pypi.org/project/colorama/), color is added to certain texts. This is to create a better user experience and highlight key actions the user can take
 
 ![Colors](documentation/documentation-colors.png)
 
-- Action functions
+- **Action functions**
 
-Throuout the game, the user is promted to input an action verb to trigger an action; "search", "move", "look", "use", "describe", "end game", and "help" all correspond to an in-game method. How the inputs are checked allows users to input only a partial string, e.g., "he" to run the help method.
+    Throuout the game, the user is promted to input an action verb to trigger an action; "search", "move", "look", "use", "describe", "end game", and "help" all correspond to an in-game method. How the inputs are checked allows users to input only a partial string, e.g., "he" to run the help method.
 
 ![Help method](documentation/documentation-help.png)
+
+- **Event and Encounter System**
+
+    When the user enters certain rooms they will trigger events or encounters. They will be prompted to use an item. If they choose the correct item they will pass the event, choosing the wrong item causes a fail. However, in an encounter, failure means death.
+
+    - **Event**
+    ---
+
+    ![Event System](documentation/documentation-event.png)
+
+    - **Event Sucess**
+    ---
+
+    ![Event Success](documentation/documentation-event-sucess.png)
+
+    - **Event Fail**
+    ---
+
+    ![Event Fail](documentation/documentation-event-fail.png)
+
+    - **Encounter System**
+    ---
+    ![Encounter System](documentation/documentation-encounter.png)
+
+    - **Encounter Success**
+    ---
+    ![Encounter Success](documentation/documentation-encounter-success.png)
+
+    - **Encounter Fail**
+    ---
+    ![Encounter Fail](documentation/documentation-encounter-fail.png)
+    
 
 ---
 ## Flowcharts
@@ -96,6 +128,7 @@ The logic of the game is a loop. While the player is "alive" they are continuall
 - [Javascript](https://www.w3schools.com/js/): Also part of the CI template, used for webpage logic
 
 ### Libraries and Tools
+
 #### Native Python Library Imports
 
 - [random](https://docs.python.org/3/library/random.html): used to randomise item locations in rooms
@@ -122,36 +155,178 @@ The logic of the game is a loop. While the player is "alive" they are continuall
 
 ## Bugs and Fixes
 
-+ Input Validation:
-    - Player could input special characters
++ **Input Validation**:
+    1. Player could input special characters
         - Fix: 
-        ```python
-        for char in input:
-                ...
-                elif not char.isalnum():
-                    raise TypeError
-            return True
-        ```
-    - Player could leave blank input
-        - Fix:
-        ```python
-        elif not bool(input):
-            raise ValueError
-        ```
-    - Player could not use spaces
-        - Fix:
-        ```python
-        else:
+            ```python
             for char in input:
-                if char.isspace() and not input.isspace():
-                    continue
-        ```
-    - Name containing spaces would not capitalize after space
+                    ...
+                    elif not char.isalnum():
+                        raise TypeError
+                return True
+            ```
+    1. Player could leave blank input
         - Fix:
-        ```python
-        else:
+            ```python
+            elif not bool(input):
+                raise ValueError
+            ```
+    1. Player could not use spaces
+        - Fix:
+            ```python
+            else:
+                for char in input:
+                    if char.isspace() and not input.isspace():
+                        continue
+            ```
+    1.  Name containing spaces would not capitalize after space
+        - Fix:
+            ```python
+            else:
+            ...
+            # .title() capitalizes letters after spaces
+            print(f"Hello, {player_name.title()}. Your journey begins in:\n")
+            ```
+---
+
++ **Encounter and Event system**:
+    
+1. If user failed input validation during the use_item method within a triggered event or encounter, or if they wrote a non-existent item, the method was called again. However, if the user then input the correct item, a None value was returned, causing the user to lose the encounter, thus losing the game.
+
+    ```python
+    if self.validate_input(
+                ...) is False:
+                # Returning method to ensure an object is returned
+                self.use_item(self.inventory)
         ...
-        print(f"Hello, {player_name.title()}. Your journey begins in:\n")
+        # If the item doesn't exist
+        if chosen_item not in self.inventory:
+            print("You haven't got that.")
+            self.use_item(self.inventory)
+    ```
+
+    - **Fix**: rather than calling the method again, returned the method. I believe that due to each method being called within a while loop, simply calling them a second time, caused them to stack. Returning broke the previous iteration before calling the next
+
+        ```python
+        if self.validate_input(
+                ...) is False:
+                # Returning method to ensure an object is returned
+            return self.use_item(self.inventory)
+        ...
+        # If the item doesn't exist
+        if chosen_item not in self.inventory:
+            print("You haven't got that.")
+            return self.use_item(self.inventory)
+
+        ```
+1. If the user failed to open the chest in the village, the user could still search the chest after the event was triggered. This also meant that there was still an event in the room, so re-entering the room would trigger it again.
+
+    - **Fix**: Simply change the search method to include a check that the room does not have an event.
+      
+        ```python
+        def search(self, room):
+            ...
+
+            if (player_choice == item_location
+                    and room.item_found is False and not room.has_event):
+                # Setting the item_found to True for this room
+                room.item_found = True
+        ``` 
+
+1. If user failed an event once, could not simply use item again on the room to pass the event. Would have to leave the room and re-enter to trigger the event
+
+    - **Fix**: Add a check to use_item method to see if current_room has an event. If it does, the use_item method will check if the correct item was used and set the room.has_event to false.
+        
+        ```python
+        def use_item(self, inventory):
+            ...
+            if ((current_room.has_event) and
+                                (chosen_item ==
+                                    current_room.required_item.upper())):
+                            sleep(2)
+                            print(
+                            ...
+                            )
+                            current_room.has_event = False
         ```
 
+---
 
++ **Inventory Length**
+
+    If user collected the majority of the items, look and use_item methods would print the inventory and spill over the console length.
+    ![Bug Inventory Length](documentation/bugs/bug-inventory-length.png)
+
+    - **Fix**: Add a check to see if the inventory has a length of over five items. If it does, print the inventory over two lines.
+        
+        ```python
+        if len(inventory) < 5:
+                # Print full inventory
+                print(*inventory, sep=", ")
+            else:
+                # Print inventory over two lines
+                print(*inventory[0:5], sep=", ")
+                print(*inventory[5:], sep=", ")
+        ```
+        ![Fix Inventory Length](documentation/bugs/fix-inventory-length.png)
+
+---
+
++ **Restarting the Game**
+
+    1. The player would have their inventory from the previous game
+        - **Fix:** Create an initialize_game function in the game_environment srcipt which initialized a new player, rather than referncing the previously instantiated current_player in player.py script.
+            ```python
+            def initialize_game():
+                ...
+                 # Inititalizing the player with default settings
+                current_player = player.Player(
+                "",
+                [],
+                map.generate_room_from_name("The Cottage")
+                )
+            ```
+    1. The Rooms would be in the same state as the end of the previous game i.e, no events, no items
+
+        - **Fix:** Create two new sets of rooms and an initialize_all_rooms function which reset room states.
+        ```python
+        # A set of rooms with encounters
+        rooms_with_encounters = {
+        river, dark_woods
+        }
+
+        # A set of rooms with events
+        rooms_with_events = {
+            river, village
+        }
+
+        ...
+
+        def initialize_all_rooms():
+        """
+        Function which initializes all rooms so that if the
+        user chooses to play again, everything will reset.
+        """
+        for room in all_rooms:
+            room.has_been_visited = False
+            room.item_found = False
+            if room in rooms_with_encounters:
+                room.has_encounter = True
+            if room in rooms_with_events:
+                room.has_event = True
+        ```
+
+    1. The while loop from the previous game was still active
+    ![Double call restart game](documentation/bugs/bug-restart.png)
+
+    ![Bug Restart Loop](documentation/bugs/bug-end-game.png)
+
+    - **Fix:** Previously, when the player.alive was set to False, the player.register_inputs() method would call game_environment.restart_game(). Now, the metod simply returns, ending the loop, and the restart_game() function is called last in the initialize_game() function.
+            
+        ```python
+        def initialize_game():
+            ...
+            current_player.register_user_inputs()
+            # Finally, calls the restart_game funtion when loop ends
+            restart_game()
+        ```
