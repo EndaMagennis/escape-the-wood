@@ -64,7 +64,7 @@ class Player():
         # Calling the validate_input method to validate player_name
         if self.validate_input(
             player_name,
-            "Name cannot contain spaces and must be alphanumerical",
+            "Name cannot be only spaces and must be alphanumerical",
             "Please give a name name between 2 to 22 letters in length"
                 ) is False:
             # Repeating the name_player method until a valid input is given.
@@ -74,6 +74,7 @@ class Player():
             self.name = player_name
             # Remove extra spaces
             player_name = re.sub(' +', ' ', player_name)
+            # .title() capitalizes letters after spaces
             print(f"Hello, {player_name.title()}. Your journey begins in:\n")
 
     def register_user_inputs(self):
@@ -250,7 +251,15 @@ I need at least 2 letters to understand where you're looking.
             # Print the inventory
             print("What would you like to look at?\n")
             print(Fore.MAGENTA)
-            print(*inventory, sep=", ")
+            # If inventory has five items or fewer
+            if len(inventory) < 5:
+                # Print full inventory
+                print(*inventory, sep=", ")
+            else:
+                # Print inventory over two lines
+                print(*inventory[0:5], sep=", ")
+                print(*inventory[5:], sep=", ")
+
             print(Fore.LIGHTBLUE_EX + f"""
 \nYou can type 'EXIT' or 'exit' to cancel action
             """)
@@ -272,7 +281,7 @@ I need at least 2 letters to understand where you're looking.
                         outcome = item.return_item_description(
                                 chosen_item.lower())
                         print(f"""
-    {Fore.MAGENTA + chosen_item}\n{Fore.WHITE + outcome}\n
+{Fore.MAGENTA + chosen_item}\n{Fore.WHITE + outcome}\n
                         """)
                         sleep(2)
                     else:
@@ -304,7 +313,14 @@ I need at least 2 letters to understand where you're looking.
             current_room = self.current_room
             print("You're currently holding:")
             print(Fore.MAGENTA)
-            print(*inventory, sep=", ")
+            if len(inventory) < 5:
+                # Print full inventory
+                print(*inventory, sep=", ")
+            else:
+                # Print inventory over two lines
+                print(*inventory[0:5], sep=", ")
+                print(*inventory[5:], sep=", ")
+                
             print(Fore.LIGHTBLUE_EX + f"""
 \nYou can type 'EXIT' or 'exit' to cancel action""")
             print(Fore.WHITE)
@@ -321,7 +337,7 @@ I need more than '{len(chosen_item)}' to work with.
 Give me at least 3 letters
 """,
                     ) is False:
-                # Repeating method and returning th output
+                # Returning the method again
                 return self.use_item(self.inventory)
             # If valid
             chosen_item = chosen_item.upper()
@@ -330,18 +346,18 @@ Give me at least 3 letters
                 if chosen_item in x:
                     # Set to full string
                     chosen_item = x
-                    if ((current_room.name == "The Cottage"
-                        or current_room.name == "The Village") and
+                    # User feedback
+                    print(f"You use the {Fore.MAGENTA + x}")
+                    print(Fore.WHITE)
+                    # Check if room has_event
+                    if ((current_room.has_event) and
                             (chosen_item ==
                                 current_room.required_item.upper())):
                         sleep(2)
                         print(Fore.GREEN + f"""
 You hear a *click* as the key turns in the lock
-""")                    # Set event to false
+""")                    # Set event to false so
                         current_room.has_event = False
-                    # User feedback
-                    print(f"You use the {Fore.MAGENTA + x}")
-                    print(Fore.WHITE)
                     # Return item
                     return chosen_item
                 elif chosen_item == "EXIT":
@@ -349,6 +365,7 @@ You hear a *click* as the key turns in the lock
                     return
                 else:
                     continue
+            # If the item doesn't exist
             if chosen_item not in self.inventory:
                 print("You haven't got that.")
                 return self.use_item(self.inventory)
@@ -421,7 +438,7 @@ You have chosen to go {Fore.CYAN + direction.upper()}...
                     if new_room.has_event:
                         sleep(2)
                         self.trigger_event()
-
+                    # Check if user has won
                     if game_environment.check_for_win_state() is True:
                         self.alive is False
 
@@ -442,13 +459,14 @@ You have chosen to go {Fore.CYAN + direction.upper()}...
 
         # Check for an encounter
         if room.has_encounter:
+            # Allow shortword to be used in encounter
             if room.name == "The Dark Woods":
                 if (used_item == "SHORTSWORD"
                         or used_item == required_item.upper()):
-
                     print("...")
                     sleep(2)
                     print("You bested the beast!")
+                    # Set encounter and event to false
                     room.has_encounter = False
                     room.has_event = False
                 else:
@@ -461,18 +479,21 @@ You have chosen to go {Fore.CYAN + direction.upper()}...
                 print("...")
                 sleep(2)
                 print(Fore.GREEN + "You bested the beast!")
+                # Set encounter and event to false
                 room.has_encounter = False
                 room.has_event = False
             else:
                 print("...")
                 sleep(2)
                 print(Fore.RED + "You Died. Game Over\n")
+                # End game
                 self.alive = False
         else:
             if used_item == required_item.upper():
                 print("...")
                 sleep(2)
                 print(Fore.GREEN + "You did it\n")
+                # Set encounter and event to false
                 room.has_encounter = False
                 room.has_event = False
             else:
