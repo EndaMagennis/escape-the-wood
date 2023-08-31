@@ -320,7 +320,7 @@ I need at least 2 letters to understand where you're looking.
                 # Print inventory over two lines
                 print(*inventory[0:5], sep=", ")
                 print(*inventory[5:], sep=", ")
-                
+
             print(Fore.LIGHTBLUE_EX + f"""
 \nYou can type 'EXIT' or 'exit' to cancel action""")
             print(Fore.WHITE)
@@ -350,7 +350,8 @@ Give me at least 3 letters
                     print(f"You use the {Fore.MAGENTA + x}")
                     print(Fore.WHITE)
                     # Check if room has_event
-                    if ((current_room.has_event) and
+                    if ((current_room.name == "The Village"
+                         or current_room.name == "The Cottage") and
                             (chosen_item ==
                                 current_room.required_item.upper())):
                         sleep(2)
