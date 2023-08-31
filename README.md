@@ -149,6 +149,7 @@ The logic of the game is a loop. While the player is "alive" they are continuall
 - [Git](https://git-scm.com/) was used for version control
 - [GitHub](https://github.com/) was used to store the code to a cloud repository
 - [GIMP](https://www.gimp.org/) was used to trim and alter PNGs used in documentation
+- [Lucidchart](https://www.lucidchart.com/) was used to create flowcharts
 - [Heroku](https://signup.heroku.com/) was used to deploy the terminal app online
 
 --- 
@@ -330,3 +331,131 @@ The logic of the game is a loop. While the player is "alive" they are continuall
             # Finally, calls the restart_game funtion when loop ends
             restart_game()
         ```
+
++ **User Input Overwriting Typing**
+
+    If the user mashed the keys while a description was typed, their inputs would overwrite what was being typed and create nonsense strings
+
+    ![Overwrite bug](documentation/bugs/bug-overwrite.png)
+
+    - **Fix:**
+        ```python
+        # Turn off user inputs
+        os.system("stty -echo")
+            for char in description:
+                sleep(0.02)
+                sys.stdout.write(Fore.WHITE + char)
+                sys.stdout.flush()
+            # Turn on user inputs
+            os.system("stty echo")
+        ```
+---
+
+## Valdation and Testing
+
+Using [Code Institute](https://codeinstitute.net/)'s [Python linter](https://pep8ci.herokuapp.com/), I validated each script in accordance with [PEP8](https://peps.python.org/pep-0008/) guidelines
+
+### run.py
+
+![Valid Run Script](documentation/validation/valid-run-script.png)
+
+### game_environment.py
+
+![Valid Game Environment Script](documentation/validation/valid-game-environment-script.png)
+
+This script contains ASCII art which flagged the linter for invalid escape sequences.
+
+### item.py
+
+![Valid Item Script](documentation/validation/valid-item-script.png)
+
+### map.py
+
+![Valid Map Script](documentation/validation/valid-map-script.png)
+
+### player.py
+
+![Valid Player Script](documentation/validation/valid-player-script.png)
+
+### room.py
+
+![Valid Room Script](documentation/validation/valid-room-script.png)
+
+---
+
+## Deployment
+
+This app was deployed to [Heroku](https://signup.heroku.com/) and can be accessed [here](https://escape-the-wood-d0f5272a8865.herokuapp.com/)
+
+1. Use the [Code Institute](https://codeinstitute.net/) portfolio project 3 [template](https://github.com/Code-Institute-Org/p3-template) to create a new repository.
+
+    ![Create repo](documentation/depoloyment/deployment-create-repo.png)
+
+2. Name the repostiory
+
+    ![Name repo](documentation/depoloyment/deployment-name-repo.png)
+
+3. Clone repository to IDE
+
+    ![Clone repo 1](documentation/depoloyment/deployment-clone-repo.png)
+    ---
+
+    ![Clone repo 2](documentation/depoloyment/deployment-clone-repo-2.png)
+    ---
+
+4. Write your code
+
+5. When you're ready for first deployment, navigate to [Heroku](https://signup.heroku.com/) and sign-up for an account
+
+6. Once you have your account set up, from your dashboard, click "New" and then "Create new app"
+
+    ![Create new app](documentation/depoloyment/deployment-create-new-app.png)
+
+7. Name your app and choose your region. Note: app name must be unique
+
+    ![Name app](documentation/depoloyment/deployment-name-app.png)
+
+8. Naviagte to settings
+
+    ![Go to settings](documentation/depoloyment/deployment-go-to-settings.png)
+
+9. Add Config Vars. *Note:* PORT 8000 is required for CI template
+
+    ![Add config vars](documentation/depoloyment/deployment-add-config-vars.png)
+
+10. Add buildpacks. *Note:* Python should be first, then NodeJS
+
+    ![Add buildpacks](documentation/depoloyment/deployment-add-buildpacks.png)
+
+11. Navigate to Deploy Tab
+
+    ![Go to deploy](documentation/depoloyment/deployment-navigate-to-deploy.png)
+
+12. Connect to GitHub and repository
+
+    ![Connect to GitHub](documentation/depoloyment/deployment-connect-to-github.png)
+
+13. Enable automatic deployment
+
+    ![Enable deployment](documentation/depoloyment/deployment-enable-auto.png)
+
+14. Open the app
+
+    ![Open app](documentation/depoloyment/deployment-open-app.png)
+
+---
+
+## Credits
+
+- [Moving from room to room](https://gamedev.stackexchange.com/questions/143523/movement-in-a-text-based-game-using-room-class-python)
+- [Clearing the screen](https://www.geeksforgeeks.org/clear-screen-python/)
+- [Typing effect](https://stackoverflow.com/questions/20302331/typing-effect-in-python)
+- [Stopping user input](https://stackoverflow.com/questions/40973391/how-to-prevent-shell-from-getting-input-keyboard-while-running-a-python-script)
+
+---
+
+## Acknowlegments
+
+[Iuliia Konovalova](https://github.com/IuliiaKonovalova) For trusting in my ability and guiding me well.
+
+My brother, Aonghus, who play tested and broke my game many times.
