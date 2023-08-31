@@ -236,14 +236,15 @@ The logic of the game is a loop. While the player is "alive" they are continuall
 
 1. If user failed an event once, could not simply use item again on the room to pass the event. Would have to leave the room and re-enter to trigger the event
 
-    - **Fix**: Add a check to use_item method to see if current_room has an event. If it does, the use_item method will check if the correct item was used and set the room.has_event to false.
+    - **Fix**: Add a check to use_item method to see if current_room is the Village or the Cottage. If so, the use_item method will check if the correct item was used and set the room.has_event to false.
         
         ```python
         def use_item(self, inventory):
             ...
-            if ((current_room.has_event) and
-                                (chosen_item ==
-                                    current_room.required_item.upper())):
+            if ((current_room.name == "The Village"
+                         or current_room.name == "The Cottage") and
+                            (chosen_item ==
+                                current_room.required_item.upper())):
                             sleep(2)
                             print(
                             ...
